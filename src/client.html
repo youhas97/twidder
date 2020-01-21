@@ -10,7 +10,7 @@
 
     <div id="login" class="bordered">
         <h3 class="header">Login</h3>
-        <form id="login-form">
+        <form id="login-form" onsubmit"return false;">
             <label class="input-label" for="login-email">Email address</label>
             <input id="login-email" type="email" placeholder="Email" required/>
 
@@ -18,13 +18,13 @@
             <input id="login-password" type="password" placeholder="Password" minlength=8
             required/>
 
-            <button type="submit" form="login-form" id="login-btn">Login</button>
+            <input type="submit" value="Login" class="submit-btn">
         </form>
     </div>
 
     <div id="signup" class="bordered">
         <h3 class="header" id="signup-header">Signup</h3>
-        <form id="signup-form">
+        <form id="signup-form" onsubmit="submitSignup(); return false;">
             <label class="input-label" for="email">Email address</label>
             <input id="email" type="email" placeholder="Email" required/>
 
@@ -36,8 +36,8 @@
             required/>
 
             <label class="input-label" for="password-2">Repeat password</label class="input-label">
-            <input id="password-2" type="password" placeholder="Repeat password" minlength=8
-            required/>
+            <input id="password-repeat" type="password" placeholder="Repeat password" minlength=8
+            required oninput="checkPasswords()"/>
 
             <label class="input-label" for="first-name">First name</label class="input-label">
             <input id="first-name"placeholder="First name" required/>
@@ -56,9 +56,8 @@
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
-            <button form="signup-form" id="signup-btn" onclick="submitSignup()">
-                Signup
-            </button>
+
+            <input type="submit" value="Signup" class="submit-btn">
         </form>
     </div>
 

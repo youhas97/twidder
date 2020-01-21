@@ -13,26 +13,20 @@ changeColor = function (id, color) {
     document.getElementById(id).style.color = color
 }
 
-submitSignup = function () {
-    // validation if passwords are matching and of the correct length.
-    var pw1 = document.getElementById("password").value;
-    var pw2 = document.getElementById("password-2").value;
+checkPasswords = function () {
+    var pw1 = document.getElementById("password");
+    var pw2 = document.getElementById("password-repeat");
 
-    if (pw1 == pw2) {
-        var form = document.getElementById("signup-form");
-        if (form.checkValidity())
-            form.submit();
+    if (pw1.value != pw2.value) {
+        pw2.setCustomValidity("Passwords do not match.");
     }
     else {
-        event.preventDefault();
-        changeText("signup-header", "Passwords do not match")
-        changeColor("signup-header", "red")
-        document.getElementById("signup").scrollTop = 0;
-        window.setTimeout(function () {
-            changeText("signup-header", "Signup")
-            changeColor("signup-header", "black")
-        }, 3000);
+        pw2.setCustomValidity("");
     }
+}
+
+submitSignup = function () {
+
 }
 
 window.onload = function () {

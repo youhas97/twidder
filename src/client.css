@@ -13,6 +13,24 @@
     text-align: center;
 }
 
+.input-label {
+    margin: 5px;
+    left: 0px;
+    margin-left: 11px;
+}
+
+.submit-div {
+    padding-top: 5px;
+    padding-left: 0px;
+    width: 80px;
+    margin: auto;
+}
+
+.submit-btn {
+    padding: 4px 10px;
+    margin-top: 10px;
+}
+
 body {
     max-width: 600px;
     width: 600px;
@@ -38,13 +56,7 @@ input {
     width: 200px;
 }
 
-button {
-    border-radius: 5px;
-    border: solid black 1px;
-    padding: 4px 10px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-}
+
 
 select {
     border-radius: 5px;
@@ -56,11 +68,6 @@ select {
     width: 200px;
 }
 
-.input-label {
-    margin: 5px;
-    left: 0px;
-    padding-left: 10px;
-}
 
 #genderlabel {
     margin: 5px;
@@ -81,7 +88,7 @@ select {
     margin-left: 5px;
     margin-bottom: 5px;
     float: right;
-    max-height: 190px;
+    max-height: 195px;
 }
 
 #signup {
@@ -91,7 +98,11 @@ select {
     margin-left: 5px;
     float: right;
 
-    max-height: 200px;
+    max-height: 195px;
 
-    overflow-y: scroll;
+    overflow-y: auto;
+}
+
+#signup-form {
+    margin-bottom: 0px;
 }

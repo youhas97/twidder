@@ -3,7 +3,68 @@
 <link href="client.css" type="text/css" rel="stylesheet">
 <script src="client.js" type="text/javascript"></script>
 <script src="serverstub.js" type="text/javascript"></script>
+<script type="text/view" id="welcomeview">
+    <div id="logo" class="bordered">
+        <img src="/assets/img/wimage.png">
+    </div>
+
+    <div id="login" class="bordered">
+        <h3 class="header">Login</h3>
+        <form id="login-form">
+            <label class="input-label" for="login-email">Email address</label>
+            <input id="login-email" type="email" placeholder="Email" required/>
+
+            <label class="input-label" for="login-password">Username</label class="input-label">
+            <input id="login-password" type="password" placeholder="Password" minlength=8
+            required/>
+
+            <button type="submit" form="login-form" id="login-btn">Login</button>
+        </form>
+    </div>
+
+    <div id="signup" class="bordered">
+        <h3 class="header" id="signup-header">Signup</h3>
+        <form id="signup-form">
+            <label class="input-label" for="email">Email address</label>
+            <input id="email" type="email" placeholder="Email" required/>
+
+            <label class="input-label" for="username">Username</label class="input-label">
+            <input id="username" placeholder="Username" required/>
+
+            <label class="input-label" for="passowrd">Password</label class="input-label">
+            <input id="password" type="password" placeholder="Password" minlength=8
+            required/>
+
+            <label class="input-label" for="password-2">Repeat password</label class="input-label">
+            <input id="password-2" type="password" placeholder="Repeat password" minlength=8
+            required/>
+
+            <label class="input-label" for="first-name">First name</label class="input-label">
+            <input id="first-name"placeholder="First name" required/>
+
+            <label class="input-label" for="family-name">Family name</label class="input-label">
+            <input id="family-name" placeholder="Family name" required/>
+
+            <label class="input-label" for="city">City</label class="input-label">
+            <input id="city" placeholder="City" required/>
+
+            <label class="input-label" for="country">Country</label class="input-label">
+            <input id="country" placeholder="Country" required/>
+
+            <label for="gender" class="input-label">Gender</label>
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <button form="signup-form" id="signup-btn" onclick="submitSignup()">
+                Signup
+            </button>
+        </form>
+    </div>
+
+</script>
 </head>
 <body>
+    <div id="login-screen"></div>
 </body>
 </html

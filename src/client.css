@@ -1,0 +1,97 @@
+.debug {
+    outline: 2px solid black;
+    outline-offset: -5px;
+}
+
+.bordered {
+    outline: 2px solid black;
+    outline-offset: -2px;
+}
+
+.header {
+    top: 5px;
+    text-align: center;
+}
+
+body {
+    max-width: 600px;
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    margin-top: 100px;
+    display: block;
+    max-height: 400px;
+
+    background-color: cornflowerblue;
+}
+
+div {
+    background-color: white;
+}
+
+input {
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 4px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    width: 200px;
+}
+
+button {
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 4px 10px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+select {
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 200px;
+}
+
+.input-label {
+    margin: 5px;
+    left: 0px;
+    padding-left: 10px;
+}
+
+#genderlabel {
+    margin: 5px;
+    left: 0px;
+    padding-left: 10px;
+}
+
+#logo {
+    align-content: center;
+    height: 400px;
+    width: 340px;
+    margin-right: 5px;
+    float: left;
+}
+
+#login {
+    width: 250px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    float: right;
+    max-height: 190px;
+}
+
+#signup {
+    align-content: center;
+    width: 250px;
+    margin-top: 5px;
+    margin-left: 5px;
+    float: right;
+
+    max-height: 200px;
+
+    overflow-y: scroll;
+}

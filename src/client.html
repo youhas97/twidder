@@ -19,7 +19,7 @@
 </script>
 <script type="text/view" id="welcomeview">
     <div id="logo" class="bordered">
-        <img src="/assets/img/wimage.png">
+        <img src="/assets/img/wimage2.png">
     </div>
 
     <div id="login" class="bordered">
@@ -76,13 +76,24 @@
 </script>
 <script type="text/view" id="profileview">
     <div id="tabs">
-        <table>
-            <tr>
-                <th onclick="selectTab()" class="tab" id="home">Home</th>
-                <th onclick="selectTab()" class="tab" id="browse">Browse</th>
-                <th onclick="selectTab()" class="tab" id="account">Account</th>
-            </tr>
-        </table>
+        <button class="tablink" onclick="openTab('home', this)" id="default-open">Home</button>
+        <button class="tablink" onclick="openTab('browse', this)" >Browse</button>
+        <button class="tablink" onclick="openTab('account', this)">Acccount</button>
+    </div>
+
+    <div id="home" class="tabcontent">
+        <h3>Home</h3>
+        <p>Home is where the heart is..</p>
+    </div>
+
+    <div id="browse" class="tabcontent">
+        <h3>Browse</h3>
+        <p>Some news this fine day!</p>
+    </div>
+
+    <div id="account" class="tabcontent">
+        <h3>Account</h3>
+        <p>Get in touch, or swing by for a cup of coffee.</p>
     </div>
 </script>
 </head>

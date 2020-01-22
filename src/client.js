@@ -4,12 +4,11 @@ displayView = function () {
     var loginscreen = document.getElementById('login-screen');
     var profilescreen = document.getElementById('profile-screen');
 
-    //token = "dwa"
+    token = "dwa"
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";
-        localStorage.setItem('selectedTab', 'home')
-        selectTab();
+        document.getElementById("default-open").click();
     } else {
         loginscreen.style.display = "block";
         profilescreen.style.display = "none";
@@ -120,22 +119,25 @@ submitSignup = function () {
     changeModalText(result.message)
 }
 
-selectTab = function () {
-    var tabs = document.getElementsByClassName('tab');
-
+openTab = function (name, elem) {
+    // Hide all elements with class="tabcontent" by default.
+    var tabs = document.getElementsByClassName("tabcontent");
     for (let tab of tabs) {
-        tab.style.backgroundColor = "white";
+        tab.style.display = "none";
     }
 
-    if (event.type == "click") {
-        event.srcElement.style.backgroundColor = "lightsteelblue";
-        localStorage.setItem("selectedTab", event.srcElement.id);
-    }
-    else {
-        document.getElementById(localStorage.getItem('selectedTab')).style.backgroundColor = "lightsteelblue"
+    // Remove background color of all tablinks and buttons.
+    var tablinks = document.getElementsByClassName("tablink");
+    for (let tablink of tablinks) {
+        tablink.style.backgroundColor = "";
     }
 
-    window.console.log(localStorage.getItem("selectedTab"))
+    // Show selected tab content
+    document.getElementById(name).style.display = "block";
+
+    // Add color to the button
+    elem.style.backgroundColor = "rgb(21, 32, 43)";
+
 }
 
 window.onload = function () {

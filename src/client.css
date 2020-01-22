@@ -20,6 +20,8 @@
     width: fit-content;
     padding: 10px;
     border-radius: 10px;
+    background-color: #004c68;
+    color: whitesmoke;
     border: 1px solid black;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     animation-name: animatetop;
@@ -28,6 +30,8 @@
 
 /* Modal Header */
 .modal-header {
+    background-color: inherit;
+    color: inherit;
     margin: inherit;
     width: 400px;
     padding: 2px 16px;
@@ -36,6 +40,7 @@
 
 /* Modal Body */
 .modal-body {
+    background-color: inherit;
     margin: inherit;
     width: 400px;
     padding: 2px 16px;
@@ -43,6 +48,8 @@
 
 /* Modal Footer */
 .modal-footer {
+    background-color: inherit;
+    color: inherit;
     margin: inherit;
     width: 400px;
     padding: 2px 16px;
@@ -76,7 +83,7 @@
 }
 
 .bordered {
-    outline: 2px solid black;
+    outline: 2px solid lightgrey;
     outline-offset: -2px;
 }
 
@@ -98,23 +105,57 @@
     margin: auto;
 }
 
+
+/* Style tab links */
+.tablink {
+    background-color: inherit;
+    color: whitesmoke;
+    border-radius: 0px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 100px;
+
+    border-collapse: collapse;
+    margin: auto;
+    user-select: none;
+}
+
+.tablink:hover {
+    background-color: #004c68;
+}
+
+  /* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+    color: whitesmoke;
+    background-color: rgb(21, 32, 43);
+    display: none;
+    padding: 100px 20px;
+}
+
 button {
     padding: 4px 10px;
     margin-top: 10px;
     border-radius: 5px;
     border: solid black 1px;
+    background-color: #008abe;
+    color: whitesmoke;
 }
 
 body {
-    background-color: cornflowerblue;
+    background-color: rgb(21, 32, 43);
     margin: 0;
 }
 
 div {
-    background-color: white;
+    background-color: whitesmoke;
 }
 
 input {
+    background-color: #008abe;
+    color: whitesmoke;
     border-radius: 5px;
     border: solid black 1px;
     padding: 4px;
@@ -124,6 +165,8 @@ input {
 }
 
 select {
+    background-color: #008abe;
+    color: whitesmoke;
     border-radius: 5px;
     border: solid black 1px;
     padding: 5px;
@@ -131,35 +174,6 @@ select {
     margin-top: 5px;
     margin-left: 10px;
     width: 200px;
-}
-
-table {
-    font-family: arial, sans-serif;
-    font-size: x-large;
-    border-collapse: collapse;
-    top: 0;
-    margin-top: 0;
-    margin-left: auto;
-    margin-right: auto;
-    width: 60vw;
-    user-select: none;
-}
-
-th {
-    border: 1px solid black;
-    text-align: center;
-    padding: 6px;
-    width: 33%;
-
-    text-size-adjust: none;
-    background-color: white;
-
-}
-
-#tabs {
-    top: 0;
-    margin-right: auto;
-    background-color: cornflowerblue;
 }
 
 #login-screen {
@@ -171,7 +185,7 @@ th {
     display: block;
     max-height: 400px;
 
-    background-color: cornflowerblue;
+    background-color: rgb(21, 32, 43);
 }
 
 #genderlabel {
@@ -189,6 +203,8 @@ th {
 }
 
 #login {
+    background-color: rgb(21, 32, 43);
+    color: whitesmoke;
     width: 250px;
     margin-left: 5px;
     margin-bottom: 5px;
@@ -197,6 +213,8 @@ th {
 }
 
 #signup {
+    background-color: rgb(21, 32, 43);
+    color: whitesmoke;
     align-content: center;
     width: 250px;
     margin-top: 5px;
@@ -215,3 +233,23 @@ th {
 #close-modal {
     float: right;
 }
+
+#profile-screen {
+    height: fit-content;
+    margin: 0;
+    font-family: Arial;
+}
+
+#tabs {
+    width: 100%;
+    height: fit-content;
+    background-color: #008abe;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: lightgrey;
+    opacity: 1; /* Firefox */
+  }

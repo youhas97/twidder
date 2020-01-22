@@ -106,15 +106,8 @@ button {
 }
 
 body {
-    max-width: 600px;
-    width: 600px;
-    height: 400px;
-    margin: auto;
-    margin-top: 100px;
-    display: block;
-    max-height: 400px;
-
     background-color: cornflowerblue;
+    margin: 0;
 }
 
 div {
@@ -130,8 +123,6 @@ input {
     width: 200px;
 }
 
-
-
 select {
     border-radius: 5px;
     border: solid black 1px;
@@ -142,6 +133,46 @@ select {
     width: 200px;
 }
 
+table {
+    font-family: arial, sans-serif;
+    font-size: x-large;
+    border-collapse: collapse;
+    top: 0;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60vw;
+    user-select: none;
+}
+
+th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 6px;
+    width: 33%;
+
+    text-size-adjust: none;
+    background-color: white;
+
+}
+
+#tabs {
+    top: 0;
+    margin-right: auto;
+    background-color: cornflowerblue;
+}
+
+#login-screen {
+    max-width: 600px;
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    margin-top: 100px;
+    display: block;
+    max-height: 400px;
+
+    background-color: cornflowerblue;
+}
 
 #genderlabel {
     margin: 5px;

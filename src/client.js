@@ -4,9 +4,12 @@ displayView = function () {
     var loginscreen = document.getElementById('login-screen');
     var profilescreen = document.getElementById('profile-screen');
 
+    //token = "dwa"
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";
+        localStorage.setItem('selectedTab', 'home')
+        selectTab();
     } else {
         loginscreen.style.display = "block";
         profilescreen.style.display = "none";
@@ -115,6 +118,24 @@ submitSignup = function () {
         changeModalHeader("Error");
     }
     changeModalText(result.message)
+}
+
+selectTab = function () {
+    var tabs = document.getElementsByClassName('tab');
+
+    for (let tab of tabs) {
+        tab.style.backgroundColor = "white";
+    }
+
+    if (event.type == "click") {
+        event.srcElement.style.backgroundColor = "lightsteelblue";
+        localStorage.setItem("selectedTab", event.srcElement.id);
+    }
+    else {
+        document.getElementById(localStorage.getItem('selectedTab')).style.backgroundColor = "lightsteelblue"
+    }
+
+    window.console.log(localStorage.getItem("selectedTab"))
 }
 
 window.onload = function () {

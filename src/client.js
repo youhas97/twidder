@@ -4,7 +4,7 @@ displayView = function () {
     var loginscreen = document.getElementById('login-screen');
     var profilescreen = document.getElementById('profile-screen');
 
-    token = "dwa"
+    //token = "dwa"
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";

@@ -15,7 +15,6 @@
 
 /* Modal Content/Box */
 .modal-content {
-    display: relative;
     margin: auto;
     width: fit-content;
     padding: 10px;
@@ -150,7 +149,8 @@ body {
 }
 
 div {
-    background-color: whitesmoke;
+    background-color: rgb(21, 32, 43);
+    color: whitesmoke;
 }
 
 input {
@@ -184,8 +184,6 @@ select {
     margin-top: 100px;
     display: block;
     max-height: 400px;
-
-    background-color: rgb(21, 32, 43);
 }
 
 #genderlabel {
@@ -203,8 +201,6 @@ select {
 }
 
 #login {
-    background-color: rgb(21, 32, 43);
-    color: whitesmoke;
     width: 250px;
     margin-left: 5px;
     margin-bottom: 5px;
@@ -213,15 +209,13 @@ select {
 }
 
 #signup {
-    background-color: rgb(21, 32, 43);
-    color: whitesmoke;
     align-content: center;
     width: 250px;
     margin-top: 5px;
     margin-left: 5px;
     float: right;
 
-    max-height: 195px;
+    max-height: 205px;
 
     overflow-y: auto;
 }

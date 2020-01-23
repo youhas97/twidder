@@ -8,7 +8,7 @@ displayView = function () {
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";
-        document.getElementById("default-open").click();
+        document.getElementById("default-tab").click();
     } else {
         loginscreen.style.display = "block";
         profilescreen.style.display = "none";
@@ -131,6 +131,9 @@ openTab = function (name, elem) {
     for (let tablink of tablinks) {
         tablink.style.backgroundColor = "";
     }
+
+    // Change title to fit which tab is selected
+    document.getElementById('title').innerHTML = name + " / Twidder";
 
     // Show selected tab content
     document.getElementById(name).style.display = "block";

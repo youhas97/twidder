@@ -1,3 +1,33 @@
+button {
+    padding: 4px 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: solid black 1px;
+    background-color: #008abe;
+    color: whitesmoke;
+}
+
+body {
+    background-color: rgb(21, 32, 43);
+    margin: 0;
+}
+
+div {
+    background-color: rgb(21, 32, 43);
+    color: whitesmoke;
+}
+
+input {
+    background-color: #008abe;
+    color: whitesmoke;
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 4px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    width: 200px;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -97,14 +127,6 @@
     margin-left: 11px;
 }
 
-.submit-div {
-    padding-top: 5px;
-    padding-left: 0px;
-    width: 80px;
-    margin: auto;
-}
-
-
 /* Style tab links */
 .tablink {
     background-color: inherit;
@@ -134,47 +156,18 @@
     padding: 100px 20px;
 }
 
-button {
-    padding: 4px 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-    border: solid black 1px;
-    background-color: #008abe;
-    color: whitesmoke;
-}
-
-body {
-    background-color: rgb(21, 32, 43);
-    margin: 0;
-}
-
-div {
-    background-color: rgb(21, 32, 43);
-    color: whitesmoke;
-}
-
-input {
+.special-input {
     background-color: #008abe;
     color: whitesmoke;
     border-radius: 5px;
     border: solid black 1px;
     padding: 4px;
     margin-bottom: 5px;
-    margin-left: 10px;
-    width: 200px;
-}
-
-select {
-    background-color: #008abe;
-    color: whitesmoke;
-    border-radius: 5px;
-    border: solid black 1px;
-    padding: 5px;
-    margin-bottom: 5px;
     margin-top: 5px;
     margin-left: 10px;
-    width: 200px;
+    width: 210px;
 }
+
 
 #login-screen {
     max-width: 600px;

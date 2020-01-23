@@ -3,7 +3,17 @@
 <head>
     <meta charset="utf-8"/>
     <title id="title">Twidder</title>
+
     <link href="client.css" type="text/css" rel="stylesheet">
+
+    <link href="welcomeview.css" type="text/css" rel="stylesheet">
+    <link href="profileview.css" type="text/css" rel="stylesheet">
+
+    <link href="home.css" type="text/css" rel="stylesheet">
+    <link href="browse.css" type="text/css" rel="stylesheet">
+    <link href="account.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="client.js" type="text/javascript"></script>
     <script src="serverstub.js" type="text/javascript"></script>
     <script type="text/view" id="modalview">
@@ -52,8 +62,8 @@
                 required/>
 
                 <label class="input-label" for="pw-repeat">Repeat password</label class="input-label">
-                <input id="pw-repeat" type="password" placeholder="Repeat password" minlength=8
-                required oninput="checkPasswords()"/>
+                <input id="pw-repeat" type="password" placeholder="Password" minlength=8
+                required oninput="checkPasswords(this, document.getElementById('pw'))"/>
 
                 <label class="input-label" for="first-name">First name</label class="input-label">
                 <input id="first-name"placeholder="First name" required/>
@@ -69,8 +79,8 @@
 
                 <label for="gender" class="input-label">Gender</label>
                 <select id="gender" class="special-input">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                 </select>
 
                 <input id="signup-btn" type="submit" value="Signup" class="special-input">
@@ -81,12 +91,43 @@
         <div id="tabs">
             <button class="tablink" onclick="openTab('Home', this)" id="default-tab">Home</button>
             <button class="tablink" onclick="openTab('Browse', this)" >Browse</button>
-            <button class="tablink" onclick="openTab('Account', this)">Acccount</button>
+            <button class="tablink" onclick="openTab('Account', this)" >Acccount</button>
         </div>
 
         <div id="Home" class="tabcontent">
-            <h3>Home</h3>
-            <p>Home is where the heart is..</p>
+            <div id="profile-info">
+                <h2 id="profile-header">Profile</h2>
+                <table id="pi-table">
+                    <tr class="pi-data">
+                        <td id="pi-name"></td>
+                    </tr>
+                    <tr class="pi-data">
+                        <td id="pi-uname"></td>
+                    </tr>
+                    <tr class="pi-data" id="secondary-info">
+
+                        <td id="pi-location">
+                            <i class="fa fa-map-marker"></i>
+                        </td>
+                        <td id="pi-gender">
+                            <i class="fa fa-venus-mars"></i>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="tweed-box">
+                <form id="tweed-form" onsubmit="submitTweed(); return false;">
+                    <textarea id="message" placeholder="Write your tweed here..."/></textarea>
+                    <br>
+                    <input id="tweed-btn" type="submit" value="Tweed" class="special-input">
+                </form>
+            </div>
+
+            <div class="ad">
+                <a href="https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en">
+                    <img src="https://i.ytimg.com/vi/oT_1WhxYHcw/maxresdefault.jpg" height="300" />
+                </a>
+            </div>
         </div>
 
         <div id="Browse" class="tabcontent">
@@ -95,8 +136,34 @@
         </div>
 
         <div id="Account" class="tabcontent">
-            <h3>Account</h3>
-            <p>Get in touch, or swing by for a cup of coffee.</p>
+            <div id="change-pw">
+                <h3 id="change-pw-header">Change password</h3>
+                <form id="pw-form" onsubmit="changePassword(); return false;" autocomplete="off">
+                    <label class="input-label" for="old-pw">Old password</label class="input-label">
+                    <input id="old-pw" type="password" placeholder="Password" required/>
+
+                    <label class="input-label" for="pw">New password</label class="input-label">
+                    <input id="new-pw" type="password" placeholder="Password" minlength=8
+                    required/>
+
+                    <label class="input-label" for="pw-repeat">Repeat new password</label class="input-label">
+                    <input id="new-pw-repeat" type="password" placeholder="Password" minlength=8
+                    required oninput="checkPasswords(this, document.getElementById('new-pw'))"/>
+
+                    <input id="change-pw-btn" type="submit" value="Change password"
+                    class="special-input">
+                </form>
+            </div>
+
+            <div class="ad">
+                <a href="https://www.burgerking.se/">
+                    <img src="https://miro.medium.com/max/720/1*ibN0ptxrg6LkZ5DZbKv2YA.png" height="400" />
+                </a>
+            </div>
+
+            <button id="signout-btn" onclick=signOut()>Sign out</button>
+
+
         </div>
     </script>
 </head>

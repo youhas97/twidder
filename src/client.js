@@ -4,10 +4,10 @@ displayView = function () {
     var loginscreen = document.getElementById('login-screen');
     var profilescreen = document.getElementById('profile-screen');
 
-    //token = "dwa"
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";
+        updateProfileInfo();
         document.getElementById("default-tab").click();
     } else {
         loginscreen.style.display = "block";
@@ -26,10 +26,7 @@ changeColor = function (id, color) {
     document.getElementById(id).style.color = color
 }
 
-checkPasswords = function () {
-    var pw1 = document.getElementById("pw");
-    var pw2 = document.getElementById("pw-repeat");
-
+checkPasswords = function (pw1, pw2) {
     if (pw1.value != pw2.value) {
         pw2.setCustomValidity("Passwords do not match.");
     }
@@ -38,10 +35,22 @@ checkPasswords = function () {
     }
 }
 
+updateProfileInfo = function () {
+    var token = localStorage.getItem("token");
+    var data = serverstub.getUserDataByToken(token).data;
+    var genderIcon = "<i class='fa fa-venus-mars'></i>"
+    var locationIcon = "<i class='fa fa-map-marker'></i>"
+
+    document.getElementById('pi-name').innerHTML = data.firstname + " " + data.familyname;
+    document.getElementById('pi-uname').innerHTML = data.email;
+    document.getElementById('pi-gender').innerHTML = genderIcon + data.gender;
+    document.getElementById('pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
+
+}
+
 createModal = function () {
     /**
      * Open modal window
-     * @param btn Button that was pressed to open the modal. String
      */
 
     // get the modal
@@ -87,6 +96,7 @@ submitLogin = function () {
 
     if (result.success) {
         localStorage.setItem("token", result.data);
+        document.getElementById("login-form").reset();
         displayView();
     } else {
         createModal();
@@ -117,6 +127,30 @@ submitSignup = function () {
         changeModalHeader("Error");
     }
     changeModalText(result.message)
+}
+
+changePassword = function () {
+    var token = localStorage.getItem("token");
+    var oldPassword = document.getElementById("old-pw").value;
+    var newPassword = document.getElementById("new-pw").value;
+    var result = serverstub.changePassword(token, oldPassword, newPassword);
+
+    createModal();
+
+    if (result.success) {
+        changeModalHeader("Success");
+        document.getElementById("pw-form").reset();
+    } else {
+        changeModalHeader("Error");
+    }
+    changeModalText(result.message)
+}
+
+signOut = function () {
+    var token = localStorage.getItem("token");
+    serverstub.signOut(token);
+    localStorage.removeItem("token");
+    displayView();
 }
 
 openTab = function (name, elem) {

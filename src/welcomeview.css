@@ -1,0 +1,75 @@
+.bordered {
+    outline: 2px solid lightgrey;
+    outline-offset: -2px;
+}
+
+.input-label {
+    margin: 5px;
+    left: 0px;
+    margin-left: 11px;
+}
+
+.header {
+    top: 5px;
+    text-align: center;
+}
+
+.special-input {
+    background-color: #008abe;
+    color: whitesmoke;
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 4px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 210px;
+}
+
+#genderlabel {
+    margin: 5px;
+    left: 0px;
+    padding-left: 10px;
+}
+
+#logo {
+    align-content: center;
+    height: 400px;
+    width: 340px;
+    margin-right: 5px;
+    float: left;
+}
+
+#login-screen {
+    max-width: 600px;
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    margin-top: 100px;
+    display: block;
+    max-height: 400px;
+}
+
+#login {
+    width: 250px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    float: right;
+    max-height: 195px;
+}
+
+#signup {
+    align-content: center;
+    width: 250px;
+    margin-top: 5px;
+    margin-left: 5px;
+    float: right;
+
+    max-height: 200px;
+
+    overflow-y: auto;
+}
+
+#signup-form {
+    margin-bottom: 0px;
+}

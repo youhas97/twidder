@@ -1,0 +1,41 @@
+#profile-info {
+    width: 20vw;
+    min-width: 200px;
+    max-width: fit-content;
+    height: 200px;
+    text-align: left;
+    border-top: 0;
+    float: left;
+}
+
+#profile-header {
+    padding-left: 5px;
+}
+
+#tweed-box {
+    float: left;
+    max-width: fit-content;
+}
+
+#message {
+    width: 40vw;
+    min-height: 130px;
+    min-width: 300px;
+    max-width: 700px;
+    height: 10vh;
+    margin-top: 20px;
+}
+
+#secondary-info {
+    opacity: 0.5;
+    font-size: 11pt;
+}
+
+#tweed-btn {
+    width: 150px;
+    float: right;
+}
+
+.pi-data {
+    text-align: left;
+}

@@ -97,6 +97,9 @@
         <div id="Home" class="tabcontent">
             <div id="profile-info">
                 <h2 id="profile-header">Profile</h2>
+                <div>
+                    <img src="/assets/img/profile-icon.png">
+                </div>
                 <table id="pi-table">
                     <tr class="pi-data">
                         <td id="pi-name"></td>
@@ -115,19 +118,33 @@
                     </tr>
                 </table>
             </div>
-            <div id="tweed-box">
-                <form id="tweed-form" onsubmit="submitTweed(); return false;">
-                    <textarea id="message" placeholder="Write your tweed here..."/></textarea>
-                    <br>
-                    <input id="tweed-btn" type="submit" value="Tweed" class="special-input">
-                </form>
-            </div>
 
             <div class="ad">
                 <a href="https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en">
-                    <img src="https://i.ytimg.com/vi/oT_1WhxYHcw/maxresdefault.jpg" height="300" />
+                    <img src="https://i.ytimg.com/vi/oT_1WhxYHcw/maxresdefault.jpg" height="150" />
                 </a>
+
             </div>
+
+            <div id="tweed-box">
+                <form id="tweed-form" onsubmit="submitTweed(); return false;">
+                    <textarea id="tweed-msg" placeholder="Write your tweed here..." class="message"/></textarea>
+                    <br>
+                    <input id="tweed-btn" type="submit" value="Tweed" class="special-input">
+                </form>
+
+            </div>
+
+            <div id="msg-wall">
+
+                <input id="update-wall-btn" type="submit" value="Update" class="special-input">
+
+                <textarea placeholder="This is a tweed" class="message"/></textarea>
+                <textarea placeholder="This is a tweed" class="message"/></textarea>
+                <textarea placeholder="This is a tweed" class="message"/></textarea>
+                <textarea placeholder="This is a tweed" class="message"/></textarea>
+            </div>
+
         </div>
 
         <div id="Browse" class="tabcontent">

@@ -15,7 +15,6 @@ displayView = function () {
     }
 };
 
-
 changeText = function (id, text) {
     // text is a string
     document.getElementById(id).innerHTML = text

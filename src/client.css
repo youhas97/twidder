@@ -129,8 +129,6 @@ i {
 }
 
 .ad {
-    margin-top: 10vh;
-    margin-right: 10vw;
     max-height: fit-content;
     max-width: fit-content;
     float: right;
@@ -147,4 +145,3 @@ i {
     color: lightgrey;
     opacity: 1; /* Firefox */
 }
-

@@ -13,17 +13,9 @@
 }
 
 #tweed-box {
-    float: left;
+    //float: left;
     max-width: fit-content;
-}
-
-#message {
-    width: 40vw;
-    min-height: 130px;
-    min-width: 300px;
-    max-width: 700px;
-    height: 10vh;
-    margin-top: 20px;
+    margin: auto;
 }
 
 #secondary-info {
@@ -31,11 +23,32 @@
     font-size: 11pt;
 }
 
+#tweed-msg {
+    height: 10vh;
+    min-height: 130px;
+}
+
 #tweed-btn {
     width: 150px;
     float: right;
 }
 
+#msg-wall {
+    clear:left;
+    max-width: 40vw;
+    margin: auto;
+}
+
+#update-wall-btn {
+}
+
 .pi-data {
     text-align: left;
+}
+
+.message {
+    width: 40vw;
+    min-width: 300px;
+    max-width: 700px;
+    margin-top: 20px;
 }

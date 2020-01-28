@@ -1,10 +1,25 @@
+.pi-data {
+    text-align: left;
+}
+
+.message {
+    float: left;
+    width: 40vw;
+    height: 130px;
+    min-width: 300px;
+    max-width: 700px;
+    margin-top: 20px;
+}
+
+#messages {
+    display: inherit;
+}
+
 #profile-info {
     width: 20vw;
     min-width: 200px;
     max-width: fit-content;
-    height: 200px;
     text-align: left;
-    border-top: 0;
     float: left;
 }
 
@@ -13,9 +28,8 @@
 }
 
 #tweed-box {
-    //float: left;
     max-width: fit-content;
-    margin: auto;
+    margin: 50px auto;
 }
 
 #secondary-info {
@@ -34,21 +48,18 @@
 }
 
 #msg-wall {
-    clear:left;
+    clear: both;
+    display: grid;
+    grid-template-columns: auto;
+
     max-width: 40vw;
     margin: auto;
+    max-height: fit-content;
+    max-width: fit-content;
 }
 
 #update-wall-btn {
-}
-
-.pi-data {
-    text-align: left;
-}
-
-.message {
-    width: 40vw;
-    min-width: 300px;
-    max-width: 700px;
-    margin-top: 20px;
+    width: 150px;
+    float: left;
+    margin-left: 10px;
 }

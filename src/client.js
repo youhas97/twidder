@@ -88,6 +88,55 @@ changeModalText = function (str) {
     document.getElementById("modal-body-text").innerHTML = str;
 }
 
+updateWall = function () {
+    var token = localStorage.getItem("token");
+    var result = serverstub.getUserMessagesByToken(token);
+    if (!result.success) {
+        createModal();
+        changeModalHeader("Error");
+        changeModalText(result.message);
+    }
+
+    document.getElementById("messages").innerHTML = "";
+    var messages = result.data;
+
+    if (messages.length == 0) {
+        document.getElementById("messages").innerHTML +=
+            "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+    }
+    // <textarea readonly class="message"/>Update to show your tweeds</textarea>
+    for (let message of messages) {
+        document.getElementById("messages").innerHTML +=
+            "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
+            ":\n\n" + message.content + "</textarea>"
+    }
+
+}
+
+tweed = function () {
+    var token = localStorage.getItem("token");
+    var email = serverstub.getUserDataByToken(token).data.email;
+    var message = document.getElementById('tweed-msg').value;
+
+    createModal();
+    if (message) {
+        var result = serverstub.postMessage(token, message, email);
+
+        if (result.success) {
+            changeModalHeader("Success");
+            document.getElementById("tweed-form").reset();
+        } else {
+            changeModalHeader("Error");
+        }
+        changeModalText(result.message)
+    }
+    else {
+        changeModalHeader("Error");
+        changeModalText("You cannot tweed an empty message.");
+    }
+
+}
+
 submitLogin = function () {
     var email = document.getElementById("login-email").value;
     var pw = document.getElementById("login-pw").value;

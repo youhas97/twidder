@@ -38,6 +38,7 @@ textarea {
     margin-bottom: 5px;
     margin-left: 10px;
     width: 200px;
+    font-size: larger;
 
     resize: none;
 }
@@ -129,15 +130,29 @@ i {
 }
 
 .ad {
+    position: fixed;
+    right: 50%;
+    margin-right:-300px;
+    bottom: 0;
     max-height: fit-content;
     max-width: fit-content;
-    float: right;
+}
+
+.special-input {
+    background-color: #008abe;
+    color: whitesmoke;
+    border-radius: 5px;
+    border: solid black 1px;
+    padding: 4px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 10px;
+    width: 210px;
 }
 
 #close-modal {
     float: right;
 }
-
 
 
 

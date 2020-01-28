@@ -119,15 +119,8 @@
                 </table>
             </div>
 
-            <div class="ad">
-                <a href="https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en">
-                    <img src="https://i.ytimg.com/vi/oT_1WhxYHcw/maxresdefault.jpg" height="150" />
-                </a>
-
-            </div>
-
             <div id="tweed-box">
-                <form id="tweed-form" onsubmit="submitTweed(); return false;">
+                <form id="tweed-form" onsubmit="tweed(); return false;">
                     <textarea id="tweed-msg" placeholder="Write your tweed here..." class="message"/></textarea>
                     <br>
                     <input id="tweed-btn" type="submit" value="Tweed" class="special-input">
@@ -136,13 +129,11 @@
             </div>
 
             <div id="msg-wall">
+                <button id="update-wall-btn" onclick="updateWall()" >Update tweeds</button>
 
-                <input id="update-wall-btn" type="submit" value="Update" class="special-input">
-
-                <textarea placeholder="This is a tweed" class="message"/></textarea>
-                <textarea placeholder="This is a tweed" class="message"/></textarea>
-                <textarea placeholder="This is a tweed" class="message"/></textarea>
-                <textarea placeholder="This is a tweed" class="message"/></textarea>
+                <div id="messages">
+                    <textarea readonly class="message"/>Update to show your tweeds</textarea>
+                </div>
             </div>
 
         </div>
@@ -172,11 +163,7 @@
                 </form>
             </div>
 
-            <div class="ad">
-                <a href="https://www.burgerking.se/">
-                    <img src="https://miro.medium.com/max/720/1*ibN0ptxrg6LkZ5DZbKv2YA.png" height="400" />
-                </a>
-            </div>
+
 
             <button id="signout-btn" onclick=signOut()>Sign out</button>
 
@@ -188,5 +175,15 @@
     <div id="modal-window" class="modal"></div>
     <div id="login-screen"></div>
     <div id="profile-screen"></div>
+
+    <!--
+    <div class="ad">
+        <a href="https://join.nordvpn.com/" target="_blank">
+            <img src="https://whichvpn.org/reviews/images/nordvpn-internet-security-privacy.png"
+            width="600" />
+        </a>
+    </div>
+    -->
+
 </body>
 </html>

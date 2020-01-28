@@ -2,13 +2,16 @@ displayView = function () {
     // the code required to display a view
     var token = localStorage.getItem("token");
     var loginscreen = document.getElementById('login-screen');
-    var profilescreen = document.getElementById('profile-screen');
+    var profilescreen = document.getElementById('logged-in-screen');
 
     if (serverstub.getUserDataByToken(token).success) {
         profilescreen.style.display = "block";
         loginscreen.style.display = "none";
         updateProfileInfo();
+        updateWall();
         document.getElementById("default-tab").click();
+
+
     } else {
         loginscreen.style.display = "block";
         profilescreen.style.display = "none";
@@ -88,35 +91,66 @@ changeModalText = function (str) {
     document.getElementById("modal-body-text").innerHTML = str;
 }
 
-updateWall = function () {
+updateWall = function (email) {
     var token = localStorage.getItem("token");
-    var result = serverstub.getUserMessagesByToken(token);
-    if (!result.success) {
-        createModal();
-        changeModalHeader("Error");
-        changeModalText(result.message);
-    }
 
-    document.getElementById("messages").innerHTML = "";
-    var messages = result.data;
+    if (email) {
+        var result = serverstub.getUserMessagesByEmail(token, email);
+        if (!result.success) {
+            createModal();
+            changeModalHeader("Error");
+            changeModalText(result.message);
+        }
+        document.getElementById("browse-messages").innerHTML = "";
+        var messages = result.data;
 
-    if (messages.length == 0) {
-        document.getElementById("messages").innerHTML +=
-            "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+        if (messages.length == 0) {
+            document.getElementById("browse-messages").innerHTML +=
+                "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+        }
+        else {
+            for (let message of messages) {
+                document.getElementById("browse-messages").innerHTML +=
+                    "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
+                    ":\n\n" + message.content + "</textarea>"
+            }
+        }
     }
-    // <textarea readonly class="message"/>Update to show your tweeds</textarea>
-    for (let message of messages) {
-        document.getElementById("messages").innerHTML +=
-            "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
-            ":\n\n" + message.content + "</textarea>"
+    else {
+        var result = serverstub.getUserMessagesByToken(token);
+        if (!result.success) {
+            createModal();
+            changeModalHeader("Error");
+            changeModalText(result.message);
+        }
+
+        document.getElementById("messages").innerHTML = "";
+        var messages = result.data;
+
+        if (messages.length == 0) {
+            document.getElementById("messages").innerHTML +=
+                "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+        }
+        else {
+            for (let message of messages) {
+                document.getElementById("messages").innerHTML +=
+                    "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
+                    ":\n\n" + message.content + "</textarea>"
+            }
+        }
     }
 
 }
 
-tweed = function () {
+tweed = function (message, self) {
     var token = localStorage.getItem("token");
-    var email = serverstub.getUserDataByToken(token).data.email;
-    var message = document.getElementById('tweed-msg').value;
+
+    if (self) {
+        email = document.getElementById("pi-uname").innerHTML;
+    }
+    else {
+        email = document.getElementById("browse-pi-uname").innerHTML;
+    }
 
     createModal();
     if (message) {
@@ -136,6 +170,40 @@ tweed = function () {
     }
 
 }
+
+findUser = function () {
+    var token = localStorage.getItem("token");
+    var email = document.getElementById("find-user").value;
+    var result = serverstub.getUserDataByEmail(token, email);
+
+
+    if (result.success) {
+        document.getElementById("user-search-form").reset();
+
+        var view = document.getElementById("Browse");
+        view.innerHTML = "";
+        view.innerHTML += document.getElementById("browse-std").innerHTML;
+        view.innerHTML += document.getElementById("user-info").innerHTML;
+
+        var data = serverstub.getUserDataByEmail(token, email).data;
+        var genderIcon = "<i class='fa fa-venus-mars'></i>"
+        var locationIcon = "<i class='fa fa-map-marker'></i>"
+
+        document.getElementById('browse-pi-name').innerHTML = data.firstname + " " + data.familyname;
+        document.getElementById('browse-pi-uname').innerHTML = email;
+        document.getElementById('browse-pi-gender').innerHTML = genderIcon + data.gender;
+        document.getElementById('browse-pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
+        document.getElementById('browse-profile-header').innerHTML = data.firstname + "'s Profile"
+
+        updateWall(email);
+    }
+    else {
+        createModal();
+        changeModalHeader("Error");
+        changeModalText(result.message)
+    }
+}
+
 
 submitLogin = function () {
     var email = document.getElementById("login-email").value;
@@ -233,12 +301,15 @@ window.onload = function () {
     var modal = document.getElementById("modal-window");
     modal.innerHTML = document.getElementById("modalview").innerHTML;
 
+    // load different views using html inside of script tag
     var loginscreen = document.getElementById('login-screen');
-    loginscreen.innerHTML = document.getElementById('welcomeview').innerHTML
+    loginscreen.innerHTML = document.getElementById('welcomeview').innerHTML;
 
-    var profilescreen = document.getElementById('profile-screen');
-    profilescreen.innerHTML = document.getElementById('profileview').innerHTML
-    // load login screen with login view script html
+    var profilescreen = document.getElementById('logged-in-screen');
+    profilescreen.innerHTML = document.getElementById('logged-in').innerHTML;
+
+    var browsescreen = document.getElementById('Browse');
+    browsescreen.innerHTML = document.getElementById('browse-std').innerHTML;
     displayView()
     //window.alert() is not allowed to be used in your implementation.
 };

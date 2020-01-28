@@ -87,16 +87,73 @@
             </form>
         </div>
     </script>
-    <script type="text/view" id="profileview">
+    <script type="test/view" id="user-info">
+        <div class="profile-info">
+            <h2 id="browse-profile-header">Profile</h2>
+            <div>
+                <img src="/assets/img/profile-icon.png">
+            </div>
+            <table id="browse-pi-table">
+                <tr class="pi-data">
+                    <td id="browse-pi-name"></td>
+                </tr>
+                <tr class="pi-data">
+                    <td id="browse-pi-uname"></td>
+                </tr>
+                <tr class="pi-data secondary-info">
+
+                    <td id="browse-pi-location">
+                        <i class="fa fa-map-marker"></i>
+                    </td>
+                    <td id="browse-pi-gender">
+                        <i class="fa fa-venus-mars"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tweed-box">
+            <form id="browse-tweed-form"
+            onsubmit="tweed(this.firstElementChild.value, false); return false;"
+            autocomplete="off">
+                <textarea id="browse-tweed-msg" placeholder="Write your tweed here..." class="message"/></textarea>
+                <br>
+                <input type="submit" value="Tweed" class="special-input tweed-btn">
+            </form>
+
+        </div>
+
+        <div class="msg-wall">
+            <button class="update-wall-btn"
+            onclick="updateWall(document.getElementById('browse-pi-uname').innerHTML)">
+            Update tweeds
+            </button>
+
+            <div id="browse-messages" class="message-grid">
+                <textarea readonly class="message"/>Update to show tweeds</textarea>
+            </div>
+        </div>
+    </script>
+    <script type="text/view" id="browse-std">
+        <div id="user-search">
+            <h2 id="browse-header">Search for a user</h2>
+            <form id="user-search-form" onsubmit="findUser(); return false" autocomplete="off">
+                <input id="find-user" type="email" placeholder="Example@mail.com" required >
+                <input id="find-user-btn" type="submit" value="Find user" class="special-input">
+            </form>
+        </div>
+    </script>
+    <script type="text/view" id="logged-in">
         <div id="tabs">
-            <button class="tablink" onclick="openTab('Home', this)" id="default-tab">Home</button>
-            <button class="tablink" onclick="openTab('Browse', this)" >Browse</button>
+            <button class="tablink" onclick="openTab('Home', this)"  id="default-tab">Home</button>
+            <button class="tablink" onclick="openTab('Browse', this)">Browse</button>
             <button class="tablink" onclick="openTab('Account', this)" >Acccount</button>
+            <button class="tablink" onclick="signOut()" id="signout-tab">Sign out</button>
         </div>
 
         <div id="Home" class="tabcontent">
-            <div id="profile-info">
-                <h2 id="profile-header">Profile</h2>
+            <div class="profile-info">
+                <h2 id="profile-header">Your Profile</h2>
                 <div>
                     <img src="/assets/img/profile-icon.png">
                 </div>
@@ -107,7 +164,7 @@
                     <tr class="pi-data">
                         <td id="pi-uname"></td>
                     </tr>
-                    <tr class="pi-data" id="secondary-info">
+                    <tr class="pi-data secondary-info">
 
                         <td id="pi-location">
                             <i class="fa fa-map-marker"></i>
@@ -119,28 +176,27 @@
                 </table>
             </div>
 
-            <div id="tweed-box">
-                <form id="tweed-form" onsubmit="tweed(); return false;">
+            <div class="tweed-box">
+                <form id="tweed-form" autocomplete="off"
+                onsubmit="tweed(this.firstElementChild.value, true); return false;" >
                     <textarea id="tweed-msg" placeholder="Write your tweed here..." class="message"/></textarea>
                     <br>
-                    <input id="tweed-btn" type="submit" value="Tweed" class="special-input">
+                    <input type="submit" value="Tweed" class="special-input tweed-btn">
                 </form>
 
             </div>
 
-            <div id="msg-wall">
-                <button id="update-wall-btn" onclick="updateWall()" >Update tweeds</button>
+            <div class="msg-wall">
+                <button class="update-wall-btn" onclick="updateWall()" >Update tweeds</button>
 
-                <div id="messages">
+                <div id="messages" class="message-grid">
                     <textarea readonly class="message"/>Update to show your tweeds</textarea>
                 </div>
             </div>
-
         </div>
 
         <div id="Browse" class="tabcontent">
-            <h3>Browse</h3>
-            <p>Some news this fine day!</p>
+
         </div>
 
         <div id="Account" class="tabcontent">
@@ -174,16 +230,15 @@
 <body>
     <div id="modal-window" class="modal"></div>
     <div id="login-screen"></div>
-    <div id="profile-screen"></div>
+    <div id="logged-in-screen"></div>
 
-    <!--
     <div class="ad">
         <a href="https://join.nordvpn.com/" target="_blank">
             <img src="https://whichvpn.org/reviews/images/nordvpn-internet-security-privacy.png"
             width="600" />
         </a>
     </div>
-    -->
+
 
 </body>
 </html>

@@ -1,0 +1,15 @@
+#browse-header {
+    margin-left: 10px;
+}
+
+#user-search {
+    float: right;
+    display: grid;
+    grid-template-columns: auto;
+    max-width: fit-content;
+    max-height: fit-content;
+}
+
+#user-search-form {
+    display: inherit;
+}

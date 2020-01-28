@@ -31,13 +31,19 @@
     width: 100%;
     height: fit-content;
     background-color: #008abe;
-    position: absolute;
+    position: sticky;
     top:0;
     left: 0;
+    border-bottom: 1px solid  rgb(21, 32, 43);
+    ;
 }
 
 #profile-screen {
     height: fit-content;
     margin: 0;
     font-family: Arial;
+}
+
+#signout-tab {
+    float: right;
 }

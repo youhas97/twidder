@@ -163,6 +163,8 @@ tweed = function (message, self) {
             changeModalHeader("Error");
         }
         changeModalText(result.message)
+
+        updateWall();
     }
     else {
         changeModalHeader("Error");

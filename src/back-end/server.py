@@ -1,16 +1,42 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_jwt_extended import (
+    JWTManager, jwt_required, get_jwt_identity,
+    create_access_token, create_refresh_token,
+    jwt_refresh_token_required, get_raw_jwt
+)
+
+# Used to generate secret key
+import secrets
+
+secret_key = secrets.token_hex()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['JWT_SECRET_KEY'] = secret_key
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 db = SQLAlchemy(app)
+jwt = JWTManager(app)
 
 import database_helper as helper
 
-@app.route('/')
-def hello_world():
+blacklist = set()
+
+# Method will be called whenever the specified tokens
+# are used to access a protected endpoint
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
+
+@app.route('/', methods = ["GET"])
+@jwt_required
+def protected():
     return 'Hello, World!'
 
 # Sign in
@@ -35,10 +61,15 @@ def sign_up():
 
         return helper.sign_up(email, pw, fname, lname, gender, city, country)
 
+
+
 # Sign out
-@app.route('/function/sign_out')
+@app.route('/function/sign_out', methods = ['DELETE'])
+@jwt_required
 def sign_out():
-    return 'test'
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"message": "Successfully signed out."}), 200
 
 # Change password
 @app.route('/function/change_password')

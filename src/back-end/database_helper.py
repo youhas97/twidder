@@ -2,11 +2,15 @@
 from flask import Flask, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_jwt_extended import (
+    JWTManager, jwt_required, get_jwt_identity,
+    create_access_token, create_refresh_token,
+    jwt_refresh_token_required, get_raw_jwt
+)
 
 # Other shit
 from werkzeug.security import generate_password_hash, check_password_hash
-import secrets
-from server import db
+from server import db, jwt
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,13 +40,13 @@ class User(db.Model):
 def sign_in(email, pw):
     user = User.query.filter_by(email=email).first()
     if (user is None):
-        return "Incorrect email"
+        return jsonify({"message": "Incorrect email adress."}), 401
     elif (check_password_hash(user.password, pw)):
-        resp = make_response()
-        resp.headers['token'] = secrets.token_hex()
+        resp = make_response({"message": "Sucessfully signed in."}, 200)
+        resp.headers['Authorization'] = "Bearer " + create_access_token(identity=email)
         return resp
     else:
-        return "Incorrect password"
+        return jsonify({"message": "Incorrect password."}), 401
 
 
 # Sign up
@@ -57,15 +61,15 @@ def sign_up(email, pw, fname, lname, gender, city, country):
                 db.session.add(user)
                 db.session.commit()
             else:
-                return "Password must be at least 8 characters long"
+                return jsonify({"message": "Password must be at least 8 characterts long."}), 401
         else:
-            return "Please fill out all forms"
+            return jsonify({"message": "Please fill out all forms."}), 401
     else:
-        return "User already exists"
+        return jsonify({"message": "User already exists."}), 401
 
     resp = make_response()
 
-    return resp
+    return jsonify({"message": "User created."}), 200
 
 # Sign out
 def sign_out():

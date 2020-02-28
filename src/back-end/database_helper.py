@@ -11,6 +11,7 @@ from flask_jwt_extended import (
 # Other shit
 from werkzeug.security import generate_password_hash, check_password_hash
 from server import db, jwt
+import json
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,83 +19,174 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
 
     firstname = db.Column(db.String, nullable=False)
-    lastname = db.Column(db.String, nullable=False)
+    familyname = db.Column(db.String, nullable=False)
     gender = db.Column(db.String, nullable=False)
 
     city = db.Column(db.String, nullable=False)
     country = db.Column(db.String, nullable=False)
 
+    messages = db.Column(db.String, nullable=False)
+
     def empty_fields(self):
         if (self.email == "" or self.password == "" or self.firstname == ""
-        or self.lastname == "" or self.gender == "" or self.city == ""
+        or self.familyname == "" or self.gender == "" or self.city == ""
         or self.country == ""):
             return True
         else:
             return False
-
-    def pw_correct_len(self):
-        return len(self.password) >= 8
 
 
 # Sign in
 def sign_in(email, pw):
     user = User.query.filter_by(email=email).first()
     if (user is None):
-        return jsonify({"message": "Incorrect email adress."}), 401
+        result = {
+            "success": False,
+            "message": "Incorrect email adress."
+        }
+        return make_response(result, 401)
     elif (check_password_hash(user.password, pw)):
-        resp = make_response({"message": "Sucessfully signed in."}, 200)
+        result = {
+            "success": True,
+            "message": "Sucessfully signed in."
+        }
+        resp = make_response(result, 200)
         resp.headers['Authorization'] = "Bearer " + create_access_token(identity=email)
         return resp
     else:
-        return jsonify({"message": "Incorrect password."}), 401
+        result = {
+                "success": False,
+                "message": "Incorrect password."
+            }
+        return make_response(result, 401)
 
 
 # Sign up
 def sign_up(email, pw, fname, lname, gender, city, country):
     hashed_pw = generate_password_hash(pw)
+    if (len(pw) < 8):
+        result = {
+                "success": False,
+                "message":"Password must be at least 8 characterts long."
+            }
+        return make_response(result, 401)
+
     user = User(email=email, password=hashed_pw, firstname=fname,
-    lastname=lname, gender=gender, city=city, country=country)
+    familyname=lname, gender=gender, city=city, country=country, messages="[]")
 
     if (User.query.filter_by(email=email).first() is None):
         if (not user.empty_fields()):
-            if (user.pw_correct_len()):
-                db.session.add(user)
-                db.session.commit()
-            else:
-                return jsonify({"message": "Password must be at least 8 characterts long."}), 401
+            db.session.add(user)
+            db.session.commit()
         else:
-            return jsonify({"message": "Please fill out all forms."}), 401
+            result = {
+                "success": False,
+                "message": "Please fill out all forms."
+            }
+            return make_response(result, 401)
     else:
-        return jsonify({"message": "User already exists."}), 401
+        result = {
+            "success": False,
+            "message": "Email already in use."
+        }
+        return make_response(result, 401)
 
-    resp = make_response()
+    result = {
+            "success": True,
+            "message": "User created successfully."
+    }
+    return make_response(result, 200)
 
-    return jsonify({"message": "User created."}), 200
-
-# Sign out
-def sign_out():
-    return 'test'
 
 # Change password
-def change_password():
-    return 'test'
+def change_password(email, old_pw, new_pw):
+    hashed_new_pw = generate_password_hash(new_pw)
 
-# Get user data by token
-def get_user_data_by_token():
-    return 'test'
+    user = User.query.filter_by(email=email).first()
 
-# Get user data by email
-def get_user_data_by_email():
-    return 'test'
+    if (not check_password_hash(user.password, old_pw)):
+        result = {
+            "success": False,
+            "message": "Incorrect old password."
+        }
+        return make_response(result, 401)
+    elif (len(new_pw) < 8):
+        result = {
+            "success": False,
+            "message": "Password must be at least 8 characters long."
+        }
+        return make_response(result, 401)
+    else:
+        user.password = hashed_new_pw
+        db.session.commit()
+        result = {
+            "success": True,
+            "message": "Password changed successfully."
+        }
+        return make_response(result, 200)
 
-# Get user messages by token
-def get_user_messages_by_token():
-    return 'test'
+# Get user data
+def get_user_data(email):
+    user = User.query.filter_by(email=email).first()
+    if (user is None):
+        result = {
+            "success": False,
+            "message": "No such user."
+        }
+        return make_response(result, 401)
+    else:
+        result = {
+            "success": True,
+            "data" : {
+                "email": user.email,
+                "firstname": user.firstname,
+                "familyname": user.familyname,
+                "gender": user.gender,
+                "city": user.city,
+                "country": user.country
+            }
+        }
+        return make_response(result, 200)
 
-# Get user messages by email
-def get_user_messages_by_email():
-    return 'test'
+# Get user messages
+def get_user_messages(email):
+    user = User.query.filter_by(email=email).first()
+
+    if (user is None):
+        result = {
+            "success": False,
+            "message": "No such user."
+        }
+        return make_response(result, 401)
+    else:
+        result = {
+            "success": True,
+            "data": user.messages
+        }
+        return make_response(result, 200)
 
 # Post messages to wall
-def post_message():
-    return 'test'
+def post_message(writer, recipient, message):
+    user = User.query.filter_by(email=recipient).first()
+
+    if (user is None):
+        result = {
+            "success": False,
+            "message": "No such user."
+        }
+        return make_response(result, 401)
+    else:
+        message = {
+            "writer": writer,
+            "message": message
+        }
+        messages = json.loads(user.messages)
+        messages.append(message)
+        user.messages = json.dumps(messages)
+        db.session.commit()
+
+        result = {
+            "success": True,
+            "message": "Message successfully posted.",
+        }
+        return make_response(result, 200)

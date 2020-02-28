@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import (
@@ -54,7 +54,7 @@ def sign_up():
         email = request.args['email']
         pw = request.args['password']
         fname = request.args['firstname']
-        lname = request.args['lastname']
+        lname = request.args['familyname']
         gender = request.args['gender']
         city = request.args['city']
         country = request.args['country']
@@ -69,35 +69,52 @@ def sign_up():
 def sign_out():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
-    return jsonify({"message": "Successfully signed out."}), 200
+    resp = make_response({"message": "Successfully signed out."}, 200)
+    return resp
 
 # Change password
-@app.route('/function/change_password')
+@app.route('/function/change_password', methods = ['POST'])
+@jwt_required
 def change_password():
-    return 'test'
+    email = get_jwt_identity()
+    old_pw = request.args['oldPassword']
+    new_pw = request.args['newPassword']
+    return helper.change_password(email, old_pw, new_pw)
 
 # Get user data by token
-@app.route('/function/get_user_data_by_token')
+@app.route('/function/get_user_data_by_token', methods = ['POST'])
+@jwt_required
 def get_user_data_by_token():
-    return 'test'
+    email = get_jwt_identity()
+    return helper.get_user_data(email)
 
 # Get user data by email
-@app.route('/function/get_user_data_by_email')
+@app.route('/function/get_user_data_by_email', methods = ['POST'])
+@jwt_required
 def get_user_data_by_email():
-    return 'test'
+    email = request.args['email']
+    return helper.get_user_data(email)
 
 # Get user messages by token
-@app.route('/function/get_user_messages_by_token')
+@app.route('/function/get_user_messages_by_token', methods = ['POST'])
+@jwt_required
 def get_user_messages_by_token():
-    return 'test'
+    email = get_jwt_identity()
+    return helper.get_user_messages(email)
 
 # Get user messages by email
-@app.route('/function/get_user_messages_by_email')
+@app.route('/function/get_user_messages_by_email', methods = ['POST'])
+@jwt_required
 def get_user_messages_by_email():
-    return 'test'
+    email = request.args['email']
+    return helper.get_user_messages(email)
 
 # Post messages to wall
-@app.route('/function/post_message')
+@app.route('/function/post_message', methods = ['POST'])
+@jwt_required
 def post_message():
-    return 'test'
+    writer = get_jwt_identity()
+    recipient = request.args['email']
+    message = request.args['message']
+    return helper.post_message(writer, recipient, message)
 

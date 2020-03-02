@@ -1,7 +1,6 @@
 # Flask shit
 from flask import Flask, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_jwt_extended import (
     JWTManager, jwt_required, get_jwt_identity,
     create_access_token, create_refresh_token,

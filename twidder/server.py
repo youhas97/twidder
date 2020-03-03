@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import (
     JWTManager, jwt_required, get_jwt_identity,
@@ -10,6 +10,7 @@ from flask_jwt_extended import (
 import secrets
 
 secret_key = secrets.token_hex()
+UPLOAD_FOLDER = '/static/assets/img'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key
@@ -19,6 +20,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = secret_key
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
@@ -34,9 +38,8 @@ def check_if_token_in_blacklist(decrypted_token):
     return jti in blacklist
 
 @app.route('/', methods = ["GET"])
-@jwt_required
-def protected():
-    return 'Hello, World!'
+def client():
+    return render_template('client.html')
 
 # Sign in
 @app.route('/function/sign_in', methods = ['POST'])

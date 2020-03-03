@@ -1,6 +1,5 @@
 venv/
 */*.pyc
-*.db
 */flask_session
 node_modules/
 

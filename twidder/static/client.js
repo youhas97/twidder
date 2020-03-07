@@ -1,53 +1,18 @@
-displayView = function () {
-    // the code required to display a view
-    var token = localStorage.getItem("token");
-    var loginscreen = document.getElementById('login-screen');
-    var profilescreen = document.getElementById('logged-in-screen');
-
-    if (serverstub.getUserDataByToken(token).success) {
-        profilescreen.style.display = "block";
-        loginscreen.style.display = "none";
-        updateProfileInfo();
-        updateWall();
-        document.getElementById("default-tab").click();
-
-
-    } else {
-        loginscreen.style.display = "block";
-        profilescreen.style.display = "none";
+/**
+   * Sends an HTTP request to server.
+   * @param request XMLHttpRequest object.
+   * @param url String containing request url.
+   * @param data Object containing data to be sent. Defaults to empty object
+   * @param token String containing the token used to authorize request.
+   * Defaults to null
+   */
+postRequest = function (request, url, data = {}, token = null) {
+    request.open('POST', url, true);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    if (!(token == null)) {
+        request.setRequestHeader("Authorization", token);
     }
-};
-
-changeText = function (id, text) {
-    // text is a string
-    document.getElementById(id).innerHTML = text
-}
-
-changeColor = function (id, color) {
-    // color is a string
-    document.getElementById(id).style.color = color
-}
-
-checkPasswords = function (pw1, pw2) {
-    if (pw1.value != pw2.value) {
-        pw2.setCustomValidity("Passwords do not match.");
-    }
-    else {
-        pw2.setCustomValidity("");
-    }
-}
-
-updateProfileInfo = function () {
-    var token = localStorage.getItem("token");
-    var data = serverstub.getUserDataByToken(token).data;
-    var genderIcon = "<i class='fa fa-venus-mars'></i>"
-    var locationIcon = "<i class='fa fa-map-marker'></i>"
-
-    document.getElementById('pi-name').innerHTML = data.firstname + " " + data.familyname;
-    document.getElementById('pi-uname').innerHTML = data.email;
-    document.getElementById('pi-gender').innerHTML = genderIcon + data.gender;
-    document.getElementById('pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
-
+    request.send(JSON.stringify(data));
 }
 
 createModal = function () {
@@ -91,10 +56,95 @@ changeModalText = function (str) {
     document.getElementById("modal-body-text").innerHTML = str;
 }
 
+checkPasswords = function (pw1, pw2) {
+    if (pw1.value != pw2.value) {
+        pw2.setCustomValidity("Passwords do not match.");
+    }
+    else {
+        pw2.setCustomValidity("");
+    }
+}
+
+displayView = function () {
+    // the code required to display a view
+    var loginscreen = document.getElementById('login-screen');
+    var profilescreen = document.getElementById('logged-in-screen');
+
+    if (localStorage.getItem("token")) {
+        loginscreen.style.display = "none";
+        profilescreen.style.display = "block";
+
+        updateProfileInfo();
+        updateWall();
+        document.getElementById('default-tab').click()
+    }
+    else {
+        loginscreen.style.display = "block";
+        profilescreen.style.display = "none";
+    }
+}
+
+updateProfileInfo = function () {
+    var token = localStorage.getItem("token");
+    var genderIcon = "<i class='fa fa-venus-mars'></i>"
+    var locationIcon = "<i class='fa fa-map-marker'></i>"
+
+    req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText)
+
+            document.getElementById('pi-name').innerHTML = data.firstname + " " + data.familyname;
+            document.getElementById('pi-uname').innerHTML = data.email;
+            document.getElementById('pi-gender').innerHTML = genderIcon + data.gender;
+            document.getElementById('pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
+        }
+        else if (this.status == 422) {
+            localStorage.removeItem("token");
+            displayView();
+        }
+    }
+
+    postRequest(req, "/get_user_data_by_token", null, token)
+
+}
+
+
 updateWall = function (email) {
     var token = localStorage.getItem("token");
 
+    req = new XMLHttpRequest();
     if (email) {
+        data = {
+            email: email
+        }
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    document.getElementById("browse-messages").innerHTML = "";
+                    var messages = JSON.parse(this.responseText);
+
+                    if (messages.length == 0) {
+                        document.getElementById("browse-messages").innerHTML +=
+                            "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+                    }
+                    else {
+                        for (let message of messages) {
+                            document.getElementById("browse-messages").innerHTML +=
+                                "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
+                                ":\n\n" + message.message + "</textarea>"
+                        }
+                    }
+                }
+                else {
+                    createModal()
+                    changeModalHeader("Error");
+                    changeModalText(this.responseText);
+                }
+            }
+        }
+        postRequest(req, "/get_user_messages_by_email", data, token)
+        /*
         var result = serverstub.getUserMessagesByEmail(token, email);
         if (!result.success) {
             createModal();
@@ -115,8 +165,41 @@ updateWall = function (email) {
                     ":\n\n" + message.content + "</textarea>"
             }
         }
+        */
     }
     else {
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    document.getElementById("messages").innerHTML = "";
+                    var messages = JSON.parse(this.responseText);
+
+                    if (messages.length == 0) {
+                        document.getElementById("messages").innerHTML +=
+                            "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
+                    }
+                    else {
+                        for (let message of messages) {
+                            document.getElementById("messages").innerHTML +=
+                                "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
+                                ":\n\n" + message.message + "</textarea>"
+                        }
+                    }
+                }
+                else if (this.status == 422) {
+                    localStorage.removeItem("token");
+                    displayView();
+                }
+                else {
+                    createModal()
+                    changeModalHeader("Error");
+                    changeModalText(this.responseText);
+                }
+            }
+        }
+        postRequest(req, "/get_user_messages_by_token", null, token)
+
+        /*
         var result = serverstub.getUserMessagesByToken(token);
         if (!result.success) {
             createModal();
@@ -138,6 +221,7 @@ updateWall = function (email) {
                     ":\n\n" + message.content + "</textarea>"
             }
         }
+        */
     }
 
 }
@@ -152,6 +236,35 @@ tweed = function (message, self) {
         email = document.getElementById("browse-pi-uname").innerHTML;
     }
 
+    data = {
+        email: email,
+        message: message
+    }
+
+    if (message) {
+        req = new XMLHttpRequest();
+        req.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                createModal();
+                if (this.status == 200) {
+                    changeModalHeader("Success");
+                    document.getElementById("tweed-form").reset();
+                }
+                else {
+                    changeModalHeader("Error");
+                }
+                changeModalText(this.responseText)
+                updateWall();
+            }
+        }
+        postRequest(req, "/post_message", data, token)
+
+    }
+    else {
+        changeModalHeader("Error");
+        changeModalText("You cannot tweed an empty message.");
+    }
+    /*
     createModal();
     if (message) {
         var result = serverstub.postMessage(token, message, email);
@@ -160,7 +273,7 @@ tweed = function (message, self) {
             changeModalHeader("Success");
             document.getElementById("tweed-form").reset();
         } else {
-            changeModalHeader("Error");
+
         }
         changeModalText(result.message)
 
@@ -170,12 +283,51 @@ tweed = function (message, self) {
         changeModalHeader("Error");
         changeModalText("You cannot tweed an empty message.");
     }
-
+    */
 }
 
 findUser = function () {
     var token = localStorage.getItem("token");
-    var email = document.getElementById("find-user").value;
+    var email = document.getElementById("find-user").value
+
+    data = {
+        email: email
+    }
+
+    req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                document.getElementById("user-search-form").reset();
+
+                var view = document.getElementById("Browse");
+                view.innerHTML = "";
+                view.innerHTML += document.getElementById("browse-std").innerHTML;
+                view.innerHTML += document.getElementById("user-info").innerHTML;
+
+                var data = JSON.parse(this.responseText);
+                var genderIcon = "<i class='fa fa-venus-mars'></i>"
+                var locationIcon = "<i class='fa fa-map-marker'></i>"
+
+                document.getElementById('browse-pi-name').innerHTML = data.firstname + " " + data.familyname;
+                document.getElementById('browse-pi-uname').innerHTML = email;
+                document.getElementById('browse-pi-gender').innerHTML = genderIcon + data.gender;
+                document.getElementById('browse-pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
+                document.getElementById('browse-profile-header').innerHTML = data.firstname + "'s Profile"
+
+                updateWall(email);
+            }
+            else {
+                changeModalHeader("Error");
+            }
+            changeModalText(this.responseText)
+            updateWall();
+        }
+    }
+    postRequest(req, "/get_user_data_by_email", data, token)
+
+
+    /*
     var result = serverstub.getUserDataByEmail(token, email);
 
 
@@ -204,24 +356,39 @@ findUser = function () {
         changeModalHeader("Error");
         changeModalText(result.message)
     }
+    */
 }
 
 
 submitLogin = function () {
-    var email = document.getElementById("login-email").value;
-    var pw = document.getElementById("login-pw").value;
-    var result = serverstub.signIn(email, pw);
-
-    if (result.success) {
-        localStorage.setItem("token", result.data);
-        document.getElementById("login-form").reset();
-        displayView();
-    } else {
-        createModal();
-        changeModalHeader("Failed");
-        changeModalText(result.message);
+    var dataObject = {
+        email: document.getElementById("login-email").value,
+        password: document.getElementById("login-pw").value,
     }
 
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                changeModalHeader("Success")
+                var token = this.getResponseHeader('Authorization')
+                localStorage.setItem("token", token);
+                console.log(token)
+
+                document.getElementById("login-form").reset();
+                displayView();
+
+                //changeModalHeader("Success");
+            }
+            else {
+                createModal();
+                changeModalHeader("Error");
+                changeModalText(this.responseText);
+            }
+        }
+    }
+
+    postRequest(req, "/sign_in", dataObject)
 }
 
 submitSignup = function () {
@@ -235,40 +402,75 @@ submitSignup = function () {
         gender: document.getElementById("gender").value,
     }
 
-    var result = serverstub.signUp(dataObject);
-    createModal();
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            createModal();
+            if (this.status == 200) {
+                changeModalHeader("Success");
+                document.getElementById("signup-form").reset();
+            }
+            else changeModalHeader("Error");
 
-    if (result.success) {
-        changeModalHeader("Success");
-        document.getElementById("signup-form").reset();
-    } else {
-        changeModalHeader("Error");
+            changeModalText(this.responseText);
+        }
     }
-    changeModalText(result.message)
+
+    postRequest(req, "/sign_up", dataObject)
 }
 
 changePassword = function () {
     var token = localStorage.getItem("token");
-    var oldPassword = document.getElementById("old-pw").value;
-    var newPassword = document.getElementById("new-pw").value;
-    var result = serverstub.changePassword(token, oldPassword, newPassword);
 
-    createModal();
-
-    if (result.success) {
-        changeModalHeader("Success");
-        document.getElementById("pw-form").reset();
-    } else {
-        changeModalHeader("Error");
+    var dataObject = {
+        oldPassword: document.getElementById("old-pw").value,
+        newPassword: document.getElementById("new-pw").value,
     }
-    changeModalText(result.message)
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            createModal();
+            if (this.status == 200) {
+                changeModalHeader("Success");
+                document.getElementById("pw-form").reset()
+            }
+            else changeModalHeader("Error");
+            changeModalText(this.responseText);
+        }
+    }
+
+    postRequest(req, "/change_password", dataObject, token)
 }
 
 signOut = function () {
     var token = localStorage.getItem("token");
-    serverstub.signOut(token);
-    localStorage.removeItem("token");
-    displayView();
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            createModal();
+            if (this.status == 200) {
+                changeModalHeader("Success");
+                document.getElementById("pw-form").reset()
+                localStorage.removeItem("token");
+                displayView();
+            }
+            else {
+                changeModalHeader("Error");
+            }
+
+            changeModalText(this.responseText);
+        }
+    }
+
+    postRequest(req, "/sign_out", null, token)
+    /*
+    request.open('POST', "/sign_out", true);
+    request.setRequestHeader("Authorization", token);
+    request.send();
+    */
+    //serverstub.signOut(token);
 }
 
 openTab = function (name, elem) {

@@ -39,36 +39,20 @@ class User(db.Model):
 def sign_in(email, pw):
     user = User.query.filter_by(email=email).first()
     if (user is None):
-        result = {
-            "success": False,
-            "message": "Incorrect email adress."
-        }
-        return make_response(result, 401)
+        return make_response("Incorrect email adress.", 400)
     elif (check_password_hash(user.password, pw)):
-        result = {
-            "success": True,
-            "message": "Sucessfully signed in."
-        }
-        resp = make_response(result, 200)
+        resp = make_response("Sucessfully signed in.", 200)
         resp.headers['Authorization'] = "Bearer " + create_access_token(identity=email)
         return resp
     else:
-        result = {
-                "success": False,
-                "message": "Incorrect password."
-            }
-        return make_response(result, 401)
+        return make_response("Incorrect password.", 400)
 
 
 # Sign up
 def sign_up(email, pw, fname, lname, gender, city, country):
     hashed_pw = generate_password_hash(pw)
     if (len(pw) < 8):
-        result = {
-                "success": False,
-                "message":"Password must be at least 8 characterts long."
-            }
-        return make_response(result, 401)
+        return make_response("Password must be at least 8 characterts long.", 400)
 
     user = User(email=email, password=hashed_pw, firstname=fname,
     familyname=lname, gender=gender, city=city, country=country, messages="[]")
@@ -78,23 +62,11 @@ def sign_up(email, pw, fname, lname, gender, city, country):
             db.session.add(user)
             db.session.commit()
         else:
-            result = {
-                "success": False,
-                "message": "Please fill out all forms."
-            }
-            return make_response(result, 401)
+            return make_response("Please fill out all forms.", 400)
     else:
-        result = {
-            "success": False,
-            "message": "Email already in use."
-        }
-        return make_response(result, 401)
+        return make_response("Email already in use.", 400)
 
-    result = {
-            "success": True,
-            "message": "User created successfully."
-    }
-    return make_response(result, 200)
+    return make_response("User created successfully.", 200)
 
 
 # Change password
@@ -104,46 +76,27 @@ def change_password(email, old_pw, new_pw):
     user = User.query.filter_by(email=email).first()
 
     if (not check_password_hash(user.password, old_pw)):
-        result = {
-            "success": False,
-            "message": "Incorrect old password."
-        }
-        return make_response(result, 401)
+        return make_response("Incorrect old password.", 400)
     elif (len(new_pw) < 8):
-        result = {
-            "success": False,
-            "message": "Password must be at least 8 characters long."
-        }
-        return make_response(result, 401)
+        return make_response("Password must be at least 8 characters long.", 400)
     else:
         user.password = hashed_new_pw
         db.session.commit()
-        result = {
-            "success": True,
-            "message": "Password changed successfully."
-        }
-        return make_response(result, 200)
+        return make_response("Password changed successfully.", 200)
 
 # Get user data
 def get_user_data(email):
     user = User.query.filter_by(email=email).first()
     if (user is None):
-        result = {
-            "success": False,
-            "message": "No such user."
-        }
-        return make_response(result, 401)
+        return make_response("No such user.", 400)
     else:
         result = {
-            "success": True,
-            "data" : {
-                "email": user.email,
-                "firstname": user.firstname,
-                "familyname": user.familyname,
-                "gender": user.gender,
-                "city": user.city,
-                "country": user.country
-            }
+            "email": user.email,
+            "firstname": user.firstname,
+            "familyname": user.familyname,
+            "gender": user.gender,
+            "city": user.city,
+            "country": user.country
         }
         return make_response(result, 200)
 
@@ -152,40 +105,24 @@ def get_user_messages(email):
     user = User.query.filter_by(email=email).first()
 
     if (user is None):
-        result = {
-            "success": False,
-            "message": "No such user."
-        }
-        return make_response(result, 401)
+        return make_response("No such user.", 400)
     else:
-        result = {
-            "success": True,
-            "data": user.messages
-        }
-        return make_response(result, 200)
+        return make_response(user.messages, 200)
 
 # Post messages to wall
 def post_message(writer, recipient, message):
     user = User.query.filter_by(email=recipient).first()
 
     if (user is None):
-        result = {
-            "success": False,
-            "message": "No such user."
-        }
-        return make_response(result, 401)
+        return make_response("No such user.", 400)
     else:
         message = {
             "writer": writer,
             "message": message
         }
         messages = json.loads(user.messages)
-        messages.append(message)
+        messages.insert(0, message)
         user.messages = json.dumps(messages)
         db.session.commit()
 
-        result = {
-            "success": True,
-            "message": "Message successfully posted.",
-        }
-        return make_response(result, 200)
+        return make_response("Message successfully posted.", 200)

@@ -241,11 +241,11 @@ tweed = function (message, self) {
         message: message
     }
 
+    createModal();
     if (message) {
         req = new XMLHttpRequest();
         req.onreadystatechange = function () {
             if (this.readyState == 4) {
-                createModal();
                 if (this.status == 200) {
                     changeModalHeader("Success");
                     document.getElementById("tweed-form").reset();

@@ -5,8 +5,10 @@ Click==7.0
 Flask==1.1.1
 Flask-JWT-Extended==3.24.1
 Flask-Migrate==2.5.2
+Flask-SocketIO==4.2.1
 Flask-SQLAlchemy==2.4.1
 gevent==1.4.0
+gevent-websocket==0.10.1
 greenlet==0.4.15
 idna==2.8
 itsdangerous==1.1.0
@@ -16,6 +18,8 @@ MarkupSafe==1.1.1
 PyJWT==1.7.1
 python-dateutil==2.8.1
 python-editor==1.0.4
+python-engineio==3.11.2
+python-socketio==4.4.0
 requests==2.22.0
 simplejson==3.17.0
 six==1.14.0

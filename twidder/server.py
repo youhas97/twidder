@@ -6,10 +6,7 @@ from flask_jwt_extended import (
     jwt_refresh_token_required, get_raw_jwt
 )
 
-# Used to generate secret key
-import secrets
-
-secret_key = secrets.token_hex()
+secret_key = '4cebdc598eef4ba935c8ea889af0afb30e8505f7005186c484d7ac506d8c7ac8'
 UPLOAD_FOLDER = '/static/assets/img'
 
 app = Flask(__name__)

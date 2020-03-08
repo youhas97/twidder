@@ -15,11 +15,29 @@ postRequest = function (request, url, data = {}, token = null) {
     request.send(JSON.stringify(data));
 }
 
-createModal = function () {
-    /**
-     * Open modal window
-     */
+displayView = function () {
+    // the code required to display a view
+    var loginscreen = document.getElementById('login-screen');
+    var profilescreen = document.getElementById('logged-in-screen');
 
+    if (localStorage.getItem("token")) {
+        loginscreen.style.display = "none";
+        profilescreen.style.display = "block";
+
+        updateProfileInfo();
+        updateWall();
+        document.getElementById('default-tab').click()
+    }
+    else {
+        loginscreen.style.display = "block";
+        profilescreen.style.display = "none";
+    }
+}
+
+/**
+ * Open modal window
+ */
+createModal = function () {
     // get the modal
     var modal = document.getElementById("modal-window");
 
@@ -62,25 +80,6 @@ checkPasswords = function (pw1, pw2) {
     }
     else {
         pw2.setCustomValidity("");
-    }
-}
-
-displayView = function () {
-    // the code required to display a view
-    var loginscreen = document.getElementById('login-screen');
-    var profilescreen = document.getElementById('logged-in-screen');
-
-    if (localStorage.getItem("token")) {
-        loginscreen.style.display = "none";
-        profilescreen.style.display = "block";
-
-        updateProfileInfo();
-        updateWall();
-        document.getElementById('default-tab').click()
-    }
-    else {
-        loginscreen.style.display = "block";
-        profilescreen.style.display = "none";
     }
 }
 

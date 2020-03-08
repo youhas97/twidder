@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, make_response, render_template, escape
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO, emit, send
 from flask_jwt_extended import (
     JWTManager, jwt_required, get_jwt_identity,
     create_access_token, create_refresh_token,
@@ -22,6 +23,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 import database_helper as helper
 
@@ -114,3 +116,5 @@ def post_message():
     message = escape(request.json['message'])
     return helper.post_message(writer, recipient, message)
 
+if __name__ == '__main__':
+    socketio.run(app)

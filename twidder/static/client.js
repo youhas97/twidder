@@ -377,12 +377,12 @@ signOut = function () {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4) {
+            localStorage.removeItem("token");
             createModal();
             if (this.status == 200) {
                 changeModalHeader("Success");
                 document.getElementById("pw-form").reset()
 
-                localStorage.removeItem("token");
                 socket.close()
             }
             else {

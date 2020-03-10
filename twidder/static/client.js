@@ -372,7 +372,6 @@ submitLogin = function () {
                 changeModalHeader("Success")
                 var token = this.getResponseHeader('Authorization')
                 localStorage.setItem("token", token);
-                console.log(token)
 
                 document.getElementById("login-form").reset();
                 displayView();

@@ -116,5 +116,9 @@ def post_message():
     message = escape(request.json['message'])
     return helper.post_message(writer, recipient, message)
 
+@socketio.on('message')
+def handle_message(message):
+    print('received message: ' + message)
+
 if __name__ == '__main__':
     socketio.run(app)

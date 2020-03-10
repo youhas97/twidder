@@ -138,7 +138,11 @@
         </div>
 
         <div class="msg-wall">
-            <h1 class="msg-wall-header">Tweeds</h1>
+            <button class="update-wall-btn"
+            onclick="updateWall(document.getElementById('browse-pi-uname').innerHTML)">
+            Update tweeds
+            </button>
+
             <div id="browse-messages" class="message-grid">
                 <textarea readonly class="message"/>Update to show tweeds</textarea>
             </div>
@@ -197,7 +201,7 @@
             </div>
 
             <div class="msg-wall">
-                <h1 class="msg-wall-header">Tweeds</h1>
+                <button class="update-wall-btn" onclick="updateWall()" >Update tweeds</button>
                 <div id="messages" class="message-grid">
                     <textarea readonly class="message"/>Update to show your tweeds</textarea>
                 </div>

@@ -15,10 +15,12 @@ socket.on('disconnect', function () {
     displayView();
 });
 
-socket.on("forced-dc", function (json) {
+socket.on('forced-dc', function (json) {
     console.log(json.message)
     socket.close()
 });
+
+socket.on('connect-error')
 
 /**
    * Sends an HTTP request to server.
@@ -120,7 +122,7 @@ updateProfileInfo = function () {
             document.getElementById('pi-gender').innerHTML = genderIcon + data.gender;
             document.getElementById('pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
         }
-        else if (this.status == 422) {
+        else if (this.status == 422 || this.status == 401) {
             localStorage.removeItem("token");
             displayView();
         }
@@ -159,6 +161,9 @@ updateWall = function (email) {
                     }
                 }
                 else {
+                    if (this.status == 400 || this.status == 401) {
+                        localStorage.removeItem('token')
+                    }
                     createModal()
                     changeModalHeader("Error");
                     changeModalText(JSON.parse(this.responseText).msg);

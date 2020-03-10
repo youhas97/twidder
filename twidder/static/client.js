@@ -113,7 +113,7 @@ updateProfileInfo = function () {
     req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var data = JSON.parse(this.responseText)
+            var data = JSON.parse(this.responseText);
 
             document.getElementById('pi-name').innerHTML = data.firstname + " " + data.familyname;
             document.getElementById('pi-uname').innerHTML = data.email;
@@ -145,6 +145,7 @@ updateWall = function (email) {
                     document.getElementById("browse-messages").innerHTML = "";
                     var messages = JSON.parse(this.responseText);
 
+                    console.log(messages.length == 0)
                     if (messages.length == 0) {
                         document.getElementById("browse-messages").innerHTML +=
                             "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
@@ -160,7 +161,7 @@ updateWall = function (email) {
                 else {
                     createModal()
                     changeModalHeader("Error");
-                    changeModalText(this.responseText);
+                    changeModalText(JSON.parse(this.responseText).msg);
                 }
             }
         }
@@ -172,6 +173,7 @@ updateWall = function (email) {
                 if (this.status == 200) {
                     document.getElementById("messages").innerHTML = "";
                     var messages = JSON.parse(this.responseText);
+                    console.log(messages)
 
                     if (messages.length == 0) {
                         document.getElementById("messages").innerHTML +=
@@ -192,7 +194,8 @@ updateWall = function (email) {
                 else {
                     createModal()
                     changeModalHeader("Error");
-                    changeModalText(this.responseText);
+                    console.log(JSON.parse(this.responseText).msg)
+                    changeModalText(JSON.parse(this.responseText).msg);
                 }
             }
         }
@@ -228,7 +231,7 @@ tweed = function (message, self) {
                 else {
                     changeModalHeader("Error");
                 }
-                changeModalText(this.responseText)
+                changeModalText(JSON.parse(this.responseText).msg)
                 updateWall();
             }
         }
@@ -275,7 +278,7 @@ findUser = function () {
             else {
                 changeModalHeader("Error");
             }
-            changeModalText(this.responseText)
+            changeModalText(JSON.parse(this.responseText).msg)
             updateWall();
         }
     }
@@ -307,7 +310,7 @@ submitLogin = function () {
             else {
                 createModal();
                 changeModalHeader("Error");
-                changeModalText(this.responseText);
+                changeModalText(JSON.parse(this.responseText).msg);
             }
         }
     }
@@ -336,7 +339,7 @@ submitSignup = function () {
             }
             else changeModalHeader("Error");
 
-            changeModalText(this.responseText);
+            changeModalText(JSON.parse(this.responseText).msg);
         }
     }
 
@@ -360,7 +363,7 @@ changePassword = function () {
                 document.getElementById("pw-form").reset()
             }
             else changeModalHeader("Error");
-            changeModalText(this.responseText);
+            changeModalText(JSON.parse(this.responseText).msg);
         }
     }
 
@@ -385,7 +388,7 @@ signOut = function () {
                 changeModalHeader("Error");
             }
 
-            changeModalText(this.responseText);
+            changeModalText(JSON.parse(this.responseText).msg);
         }
     }
 

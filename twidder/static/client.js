@@ -4,7 +4,6 @@ const socket = io({
 
 socket.on('connect', function () {
     socket.emit('message', 'WebSocket ' + this.id + ' connected');
-    email = localStorage.getItem("email");
 });
 
 socket.on('disconnect', function () {
@@ -13,7 +12,6 @@ socket.on('disconnect', function () {
     changeModalText("You have been forcefully logged out.")
 
     localStorage.removeItem('token');
-    localStorage.removeItem("email");
     displayView();
 });
 
@@ -124,7 +122,6 @@ updateProfileInfo = function () {
         }
         else if (this.status == 422) {
             localStorage.removeItem("token");
-            localStorage.removeItem("email");
             displayView();
         }
     }
@@ -190,7 +187,6 @@ updateWall = function (email) {
                 }
                 else if (this.status == 422) {
                     localStorage.removeItem("token");
-                    localStorage.removeItem("email");
                     displayView();
                 }
                 else {
@@ -383,7 +379,6 @@ signOut = function () {
                 document.getElementById("pw-form").reset()
 
                 localStorage.removeItem("token");
-                localStorage.removeItem("email");
                 socket.close()
             }
             else {

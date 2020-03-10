@@ -137,7 +137,7 @@ def disconnection():
 @socketio.on('connect')
 def connect_handler():
     if current_user.is_authenticated:
-            emit('forced-dc', {'message': 'Someone else logged in with the same account'},
+            emit('forced-dc', {'message': 'Someone else has logged in with the same account'},
             room=current_user.email)
             join_room(current_user.email)
     else:

@@ -1,6 +1,7 @@
 # Flask shit
 from flask import Flask, Response, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, login_user
 from flask_jwt_extended import (
     JWTManager, jwt_required, get_jwt_identity,
     create_access_token, create_refresh_token,
@@ -12,7 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from server import db, jwt
 import json
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
@@ -26,6 +27,8 @@ class User(db.Model):
 
     messages = db.Column(db.String, nullable=False)
 
+    current_socket = None
+
     def empty_fields(self):
         if (self.email == "" or self.password == "" or self.firstname == ""
         or self.familyname == "" or self.gender == "" or self.city == ""
@@ -33,7 +36,6 @@ class User(db.Model):
             return True
         else:
             return False
-
 
 # Sign in
 def sign_in(email, pw):
@@ -43,10 +45,10 @@ def sign_in(email, pw):
     elif (check_password_hash(user.password, pw)):
         resp = make_response("Sucessfully signed in.", 200)
         resp.headers['Authorization'] = "Bearer " + create_access_token(identity=email)
+        login_user(user)
         return resp
     else:
         return make_response("Incorrect password.", 400)
-
 
 # Sign up
 def sign_up(email, pw, fname, lname, gender, city, country):
@@ -126,3 +128,6 @@ def post_message(writer, recipient, message):
         db.session.commit()
 
         return make_response("Message successfully posted.", 200)
+
+def load_user(user_id):
+    return User.query.get(int(user_id))

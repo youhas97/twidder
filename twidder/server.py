@@ -1,6 +1,8 @@
+import functools
 from flask import Flask, request, jsonify, make_response, render_template, escape
 from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit, send, disconnect, join_room
+from flask_login import LoginManager, login_required, logout_user, current_user
 from flask_jwt_extended import (
     JWTManager, jwt_required, get_jwt_identity,
     create_access_token, create_refresh_token,
@@ -24,6 +26,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 import database_helper as helper
 
@@ -35,6 +39,10 @@ blacklist = set()
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
+
+@login_manager.user_loader
+def load_user(user_id):
+    return helper.load_user(user_id)
 
 @app.route('/', methods = ["GET"])
 def client():
@@ -65,9 +73,11 @@ def sign_up():
 # Sign out
 @app.route('/sign_out', methods = ['POST'])
 @jwt_required
+@login_required
 def sign_out():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
+    logout_user()
     return make_response("Successfully signed out.", 200)
 
 # Change password
@@ -118,7 +128,20 @@ def post_message():
 
 @socketio.on('message')
 def handle_message(message):
-    print('received message: ' + message)
+    print('Received message: ' + message)
+
+@socketio.on('disconnect')
+def disconnection():
+    print('Websocket disconnected')
+
+@socketio.on('connect')
+def connect_handler():
+    if current_user.is_authenticated:
+            emit('forced-dc', {'message': 'Someone else logged in with the same account'},
+            room=current_user.email)
+            join_room(current_user.email)
+    else:
+        return False
 
 if __name__ == '__main__':
     socketio.run(app)

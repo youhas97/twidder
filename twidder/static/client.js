@@ -1,3 +1,27 @@
+const socket = io({
+    autoConnect: false
+});
+
+socket.on('connect', function () {
+    socket.emit('message', 'WebSocket ' + this.id + ' connected');
+    email = localStorage.getItem("email");
+});
+
+socket.on('disconnect', function () {
+    createModal();
+    changeModalHeader("Logged out");
+    changeModalText("You have been forcefully logged out.")
+
+    localStorage.removeItem('token');
+    localStorage.removeItem("email");
+    displayView();
+});
+
+socket.on("forced-dc", function (json) {
+    console.log(json.message)
+    socket.close()
+});
+
 /**
    * Sends an HTTP request to server.
    * @param request XMLHttpRequest object.
@@ -100,6 +124,7 @@ updateProfileInfo = function () {
         }
         else if (this.status == 422) {
             localStorage.removeItem("token");
+            localStorage.removeItem("email");
             displayView();
         }
     }
@@ -143,28 +168,6 @@ updateWall = function (email) {
             }
         }
         postRequest(req, "/get_user_messages_by_email", data, token)
-        /*
-        var result = serverstub.getUserMessagesByEmail(token, email);
-        if (!result.success) {
-            createModal();
-            changeModalHeader("Error");
-            changeModalText(result.message);
-        }
-        document.getElementById("browse-messages").innerHTML = "";
-        var messages = result.data;
-
-        if (messages.length == 0) {
-            document.getElementById("browse-messages").innerHTML +=
-                "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
-        }
-        else {
-            for (let message of messages) {
-                document.getElementById("browse-messages").innerHTML +=
-                    "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
-                    ":\n\n" + message.content + "</textarea>"
-            }
-        }
-        */
     }
     else {
         req.onreadystatechange = function () {
@@ -187,6 +190,7 @@ updateWall = function (email) {
                 }
                 else if (this.status == 422) {
                     localStorage.removeItem("token");
+                    localStorage.removeItem("email");
                     displayView();
                 }
                 else {
@@ -197,30 +201,6 @@ updateWall = function (email) {
             }
         }
         postRequest(req, "/get_user_messages_by_token", null, token)
-
-        /*
-        var result = serverstub.getUserMessagesByToken(token);
-        if (!result.success) {
-            createModal();
-            changeModalHeader("Error");
-            changeModalText(result.message);
-        }
-
-        document.getElementById("messages").innerHTML = "";
-        var messages = result.data;
-
-        if (messages.length == 0) {
-            document.getElementById("messages").innerHTML +=
-                "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
-        }
-        else {
-            for (let message of messages) {
-                document.getElementById("messages").innerHTML +=
-                    "<textarea readonly class='message'/>" + message.writer.toUpperCase() +
-                    ":\n\n" + message.content + "</textarea>"
-            }
-        }
-        */
     }
 
 }
@@ -263,26 +243,6 @@ tweed = function (message, self) {
         changeModalHeader("Error");
         changeModalText("You cannot tweed an empty message.");
     }
-    /*
-    createModal();
-    if (message) {
-        var result = serverstub.postMessage(token, message, email);
-
-        if (result.success) {
-            changeModalHeader("Success");
-            document.getElementById("tweed-form").reset();
-        } else {
-
-        }
-        changeModalText(result.message)
-
-        updateWall();
-    }
-    else {
-        changeModalHeader("Error");
-        changeModalText("You cannot tweed an empty message.");
-    }
-    */
 }
 
 findUser = function () {
@@ -324,38 +284,6 @@ findUser = function () {
         }
     }
     postRequest(req, "/get_user_data_by_email", data, token)
-
-
-    /*
-    var result = serverstub.getUserDataByEmail(token, email);
-
-
-    if (result.success) {
-        document.getElementById("user-search-form").reset();
-
-        var view = document.getElementById("Browse");
-        view.innerHTML = "";
-        view.innerHTML += document.getElementById("browse-std").innerHTML;
-        view.innerHTML += document.getElementById("user-info").innerHTML;
-
-        var data = serverstub.getUserDataByEmail(token, email).data;
-        var genderIcon = "<i class='fa fa-venus-mars'></i>"
-        var locationIcon = "<i class='fa fa-map-marker'></i>"
-
-        document.getElementById('browse-pi-name').innerHTML = data.firstname + " " + data.familyname;
-        document.getElementById('browse-pi-uname').innerHTML = email;
-        document.getElementById('browse-pi-gender').innerHTML = genderIcon + data.gender;
-        document.getElementById('browse-pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
-        document.getElementById('browse-profile-header').innerHTML = data.firstname + "'s Profile"
-
-        updateWall(email);
-    }
-    else {
-        createModal();
-        changeModalHeader("Error");
-        changeModalText(result.message)
-    }
-    */
 }
 
 
@@ -372,10 +300,12 @@ submitLogin = function () {
                 changeModalHeader("Success")
                 var token = this.getResponseHeader('Authorization')
                 localStorage.setItem("token", token);
+                localStorage.removeItem("uname", dataObject.email);
 
                 document.getElementById("login-form").reset();
                 displayView();
 
+                socket.open()
                 //changeModalHeader("Success");
             }
             else {
@@ -451,8 +381,10 @@ signOut = function () {
             if (this.status == 200) {
                 changeModalHeader("Success");
                 document.getElementById("pw-form").reset()
+
                 localStorage.removeItem("token");
-                displayView();
+                localStorage.removeItem("email");
+                socket.close()
             }
             else {
                 changeModalHeader("Error");
@@ -463,12 +395,6 @@ signOut = function () {
     }
 
     postRequest(req, "/sign_out", null, token)
-    /*
-    request.open('POST', "/sign_out", true);
-    request.setRequestHeader("Authorization", token);
-    request.send();
-    */
-    //serverstub.signOut(token);
 }
 
 openTab = function (name, elem) {
@@ -499,6 +425,10 @@ window.onload = function () {
     //code that is executed as the page is loaded.
     //You shall put your own custom code here.
 
+    if (localStorage.getItem("token") && socket.disconnected) {
+        socket.open()
+    }
+
     // load modal window with modal view script html
     var modal = document.getElementById("modal-window");
     modal.innerHTML = document.getElementById("modalview").innerHTML;
@@ -512,6 +442,7 @@ window.onload = function () {
 
     var browsescreen = document.getElementById('Browse');
     browsescreen.innerHTML = document.getElementById('browse-std').innerHTML;
+
     displayView()
     //window.alert() is not allowed to be used in your implementation.
 };

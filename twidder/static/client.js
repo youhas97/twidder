@@ -146,8 +146,6 @@ updateWall = function (email) {
                 if (this.status == 200) {
                     document.getElementById("browse-messages").innerHTML = "";
                     var messages = JSON.parse(this.responseText);
-
-                    console.log(messages.length == 0)
                     if (messages.length == 0) {
                         document.getElementById("browse-messages").innerHTML +=
                             "<textarea readonly class='message'/>No tweeds at this moment</textarea>"
@@ -178,7 +176,6 @@ updateWall = function (email) {
                 if (this.status == 200) {
                     document.getElementById("messages").innerHTML = "";
                     var messages = JSON.parse(this.responseText);
-                    console.log(messages)
 
                     if (messages.length == 0) {
                         document.getElementById("messages").innerHTML +=
@@ -199,7 +196,6 @@ updateWall = function (email) {
                 else {
                     createModal()
                     changeModalHeader("Error");
-                    console.log(JSON.parse(this.responseText).msg)
                     changeModalText(JSON.parse(this.responseText).msg);
                 }
             }
@@ -392,7 +388,6 @@ signOut = function () {
             else {
                 changeModalHeader("Error");
             }
-
             changeModalText(JSON.parse(this.responseText).msg);
         }
     }

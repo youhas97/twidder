@@ -122,7 +122,7 @@ updateProfileInfo = function () {
             document.getElementById('pi-gender').innerHTML = genderIcon + data.gender;
             document.getElementById('pi-location').innerHTML = locationIcon + data.city + ", " + data.country;
         }
-        else if (this.status == 422 || this.status == 401 this.status == 400) {
+        else if (this.status == 422 || this.status == 401 || this.status == 400) {
             localStorage.removeItem("token");
             displayView();
         }

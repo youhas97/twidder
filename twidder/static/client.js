@@ -224,6 +224,7 @@ tweed = function (message, self) {
                 if (this.status == 200) {
                     changeModalHeader("Success");
                     document.getElementById("tweed-form").reset();
+                    document.getElementById("browse-tweed-form").reset();
                 }
                 else {
                     changeModalHeader("Error");
@@ -273,9 +274,11 @@ findUser = function () {
                 updateWall(email);
             }
             else {
+
+                createModal();
                 changeModalHeader("Error");
+                changeModalText(JSON.parse(this.responseText).msg)
             }
-            changeModalText(JSON.parse(this.responseText).msg)
             updateWall();
         }
     }

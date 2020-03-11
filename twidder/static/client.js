@@ -8,12 +8,7 @@ socket.on('connect', function () {
 });
 
 socket.on('disconnect', function () {
-    createModal();
-    changeModalHeader("Logged out");
-    changeModalText("You have been forcefully logged out.")
-
-    localStorage.removeItem('token');
-    displayView();
+    signOut();
 });
 
 socket.on('forced-dc', function (json) {
@@ -378,11 +373,10 @@ signOut = function () {
         if (this.readyState == 4) {
             createModal();
             if (this.status == 200) {
-                changeModalHeader("Success");
+                changeModalHeader("Logged out");
                 document.getElementById("pw-form").reset()
 
                 localStorage.removeItem("token");
-                socket.close()
             }
             else {
                 changeModalHeader("Error");
@@ -423,11 +417,9 @@ window.onload = function () {
     //code that is executed as the page is loaded.
     //You shall put your own custom code here.
 
-    /*
     this.setInterval(function () {
-        console.log(socket)
+        //socket.close()
     }, 5000);
-    */
 
     if (localStorage.getItem("token") && socket.disconnected) {
         socket.open()

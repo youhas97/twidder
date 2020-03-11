@@ -78,7 +78,7 @@ def sign_out():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
     logout_user()
-    return make_response({"msg": "Successfully signed out."}, 200)
+    return make_response({"msg": "You have been logged out."}, 200)
 
 # Change password
 @app.route('/change_password', methods = ['POST'])
@@ -131,7 +131,7 @@ def handle_message(message):
     print('Received message: ' + message)
 
 @socketio.on('disconnect')
-def disconnection():
+def disconnect_handler():
     print('Websocket disconnected')
 
 @socketio.on('connect')

@@ -162,7 +162,7 @@
             <button class="tablink" onclick="openTab('Home', this)"  id="default-tab">Home</button>
             <button class="tablink" onclick="openTab('Browse', this)">Browse</button>
             <button class="tablink" onclick="openTab('Account', this)" >Acccount</button>
-            <button class="tablink" onclick="signOut()" id="signout-tab">Sign out</button>
+            <button class="tablink" onclick="socket.close()" id="signout-tab">Sign out</button>
         </div>
 
         <div id="Home" class="tabcontent">
@@ -234,7 +234,7 @@
 
 
 
-            <button id="signout-btn" onclick=signOut()>Sign out</button>
+            <button id="signout-btn" onclick=socket.close()>Sign out</button>
 
 
         </div>

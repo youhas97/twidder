@@ -1,5 +1,6 @@
 const socket = io({
-    autoConnect: false
+    autoConnect: false,
+    timeout: 1000,
 });
 
 socket.on('connect', function () {
@@ -19,8 +20,6 @@ socket.on('forced-dc', function (json) {
     console.log(json.message)
     socket.close()
 });
-
-socket.on('connect-error')
 
 /**
    * Sends an HTTP request to server.
@@ -377,18 +376,19 @@ signOut = function () {
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (this.readyState == 4) {
-            localStorage.removeItem("token");
             createModal();
             if (this.status == 200) {
                 changeModalHeader("Success");
                 document.getElementById("pw-form").reset()
 
+                localStorage.removeItem("token");
                 socket.close()
             }
             else {
                 changeModalHeader("Error");
             }
             changeModalText(JSON.parse(this.responseText).msg);
+            displayView();
         }
     }
 
@@ -422,6 +422,12 @@ openTab = function (name, elem) {
 window.onload = function () {
     //code that is executed as the page is loaded.
     //You shall put your own custom code here.
+
+    /*
+    this.setInterval(function () {
+        console.log(socket)
+    }, 5000);
+    */
 
     if (localStorage.getItem("token") && socket.disconnected) {
         socket.open()

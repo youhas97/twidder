@@ -9,6 +9,8 @@ socket.on('connect', function () {
 
 socket.on('disconnect', function () {
     signOut();
+    localStorage.clear();
+    displayView();
 });
 
 socket.on('forced-dc', function (json) {
